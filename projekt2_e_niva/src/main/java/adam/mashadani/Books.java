@@ -5,8 +5,8 @@ public class Books extends Publications{
     private String genre;
     private int pages;
     
-    public Books(int id, String title, Boolean isAvailable, String author, String genre, int pages) {
-        super(id, title, isAvailable);
+    public Books(String title, Boolean isAvailable, String author, String genre, int pages) {
+        super(title, isAvailable);
         this.author = author;
         this.genre = genre;
         this.pages = pages;

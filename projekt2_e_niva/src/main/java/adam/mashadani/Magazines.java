@@ -5,8 +5,8 @@ public class Magazines extends Publications{
     private String category;
     private int publishYear;
 
-    public Magazines(int id, String title, Boolean isAvailable, int issueNumber, String category, int publishYear) {
-        super(id, title, isAvailable);
+    public Magazines(String title, Boolean isAvailable, int issueNumber, String category, int publishYear) {
+        super(title, isAvailable);
         this.issueNumber = issueNumber;
         this.category = category;
         this.publishYear = publishYear;

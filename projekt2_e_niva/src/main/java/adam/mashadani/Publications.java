@@ -1,19 +1,18 @@
 package adam.mashadani;
 
 public abstract class Publications {
-    private int id;
+    private String id;
     private String title;
     private Boolean isAvailable;
 
-    public Publications(int id, String title, Boolean isAvailable) {
-        this.id = id;
+    public Publications(String title, Boolean isAvailable) {
         this.title = title;
         this.isAvailable = isAvailable;
     }
 
     public abstract String getInfo();
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -25,7 +24,7 @@ public abstract class Publications {
         return isAvailable;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
