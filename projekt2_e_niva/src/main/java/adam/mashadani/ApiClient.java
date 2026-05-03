@@ -33,13 +33,24 @@ public class ApiClient {
             int status = response.getStatus();
 
             if (status != 200 && status != 201) {
-                returnMessage = "Fel på server " + status;
+                returnMessage = "Fel från servern, statuskod: " + status;
             }
         } catch (UnirestException e) {
             returnMessage = "Kunde inte nå servern, felkod: " + e.getLocalizedMessage();
         }
 
         return returnMessage;
+    }
+
+    public static String getData(String path) {
+        HttpResponse<String> response = null;
+        try {
+            response = Unirest.get(base_url + path).asString();
+        } catch (UnirestException e) {
+            System.out.println("Kunde inte nå servern, felkod: " + e.getLocalizedMessage()); 
+        }
+        
+        return response.getBody();
     }
 
 }
