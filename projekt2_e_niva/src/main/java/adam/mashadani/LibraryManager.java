@@ -24,7 +24,7 @@ public class LibraryManager {
     public void AddMagazines(String title, Boolean isAvailable, int issueNumber,
             String catergory, int publishYear) {
         Magazines newMagazine = new Magazines(title, isAvailable, issueNumber, catergory, publishYear);
-        // System.out.println(ApiClient.postData("magazines", newMagazine));
+        System.out.println(ApiClient.postData("magazines", newMagazine));
         publicationsList.add(newMagazine);
     }
 
