@@ -53,4 +53,16 @@ public class ApiClient {
         return response.getBody();
     }
 
+    public static String deleteData(String path, String id){
+        String returnMessage = "";
+        try{
+            int responseStatus = Unirest.delete(base_url + path + "/" + id).asEmpty().getStatus();
+        }catch(UnirestException e){
+            returnMessage = "Error: " + e.getLocalizedMessage();
+        }
+
+        return returnMessage;
+        
+    }
+
 }

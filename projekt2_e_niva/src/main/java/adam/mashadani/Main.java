@@ -7,11 +7,11 @@ public class Main {
         LibraryManager lm = new LibraryManager();
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Välkommen till meny, välj bland alternativen " + "\n" + "1. Skriv ut böcker"
-                + "\n" + "2. Skriv ut tidnignar" + "\n" + "3. Lägg till en bok" + "\n"
-                + "4. Lägg till en tidning" + "\n" + "5. Avsluta");
-
+        
         while (true) {
+            System.out.println("Välkommen till meny, välj bland alternativen " + "\n" + "1. Skriv ut böcker"
+                    + "\n" + "2. Skriv ut tidnignar" + "\n" + "3. Lägg till en bok" + "\n"
+                    + "4. Lägg till en tidning" + "\n" + "5. Avsluta");
             String answer = scanner.nextLine();
             switch (answer) {
                 case "1":
@@ -54,8 +54,6 @@ public class Main {
                     scanner.nextLine();
                     boolean isAvailable2 = true;
 
-                    // Anropa managern (notera att jag använder små bokstäver för att matcha
-                    // Java-standard)
                     lm.AddMagazines(title2, isAvailable2, issueNumber, category, publishYear);
 
                     System.out.println("\nTidningen har registrerats!");

@@ -10,8 +10,6 @@ import java.lang.reflect.Type;
 public class LibraryManager {
     private ArrayList<Publications> publicationsList = new ArrayList<Publications>();
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    private Type publicationListType = new TypeToken<ArrayList<Publications>>() {
-    }.getType();
 
     public void AddBook(String title, Boolean isAvailable, String author,
             String genre, int pages) {
@@ -29,8 +27,11 @@ public class LibraryManager {
     }
 
     public void showBooks() {
+        Type booksListType = new TypeToken<ArrayList<Books>>() {
+        }.getType();
         String jsonData = ApiClient.getData("books");
-        ArrayList<Books> books = gson.fromJson(jsonData, publicationListType);
+        ArrayList<Books> books = gson.fromJson(jsonData, booksListType);
+        publicationsList.clear();
         publicationsList.addAll(books);
         for (Publications p : publicationsList) {
             if (p instanceof Books) {
@@ -42,7 +43,10 @@ public class LibraryManager {
 
     public void showMagazines() {
         String jsonData = ApiClient.getData("magazines");
-        ArrayList<Magazines> magazines = gson.fromJson(jsonData, publicationListType);
+        Type magazineListType = new TypeToken<ArrayList<Magazines>>() {
+        }.getType();
+        ArrayList<Magazines> magazines = gson.fromJson(jsonData, magazineListType);
+        publicationsList.clear();
         publicationsList.addAll(magazines);
         for (Publications p : publicationsList) {
             if (p instanceof Magazines) {
