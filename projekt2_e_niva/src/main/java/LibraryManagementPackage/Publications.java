@@ -1,6 +1,6 @@
-package adam.mashadani;
+package LibraryManagementPackage;
 
-public abstract class Publications {
+public abstract class Publications implements Comparable {
     private String id;
     private String title;
     private Boolean isAvailable;

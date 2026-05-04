@@ -1,4 +1,4 @@
-package adam.mashadani;
+package LibraryManagementPackage;
 
 public class Magazines extends Publications{
     private int issueNumber;
@@ -40,6 +40,14 @@ public class Magazines extends Publications{
     public void setPublishYear(int publishYear) {
         this.publishYear = publishYear;
     }
+
+    @Override
+    public int compareTo(Object arg0) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    
 
     
 

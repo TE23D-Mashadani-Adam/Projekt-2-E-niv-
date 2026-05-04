@@ -2,11 +2,16 @@ package adam.mashadani;
 
 import java.util.Scanner;
 
+import LibraryManagementPackage.LibraryManager;
+import UserManagementPackage.UserManager;
+
 public class Main {
     public static void main(String[] args) {
         LibraryManager lm = new LibraryManager();
+        UserManager um = new UserManager();
         Scanner scanner = new Scanner(System.in);
 
+        
         
         while (true) {
             System.out.println("Välkommen till meny, välj bland alternativen " + "\n" + "1. Skriv ut böcker"

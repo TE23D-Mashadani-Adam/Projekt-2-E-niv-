@@ -1,4 +1,4 @@
-package adam.mashadani;
+package LibraryManagementPackage;
 
 public class Books extends Publications{
     private String author;
@@ -40,6 +40,14 @@ public class Books extends Publications{
     public void setPages(int pages) {
         this.pages = pages;
     }
+
+    @Override
+    public int compareTo(Object arg0) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    
 
     
 

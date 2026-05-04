@@ -49,6 +49,10 @@ public class ApiClient {
         } catch (UnirestException e) {
             System.out.println("Kunde inte nå servern, felkod: " + e.getLocalizedMessage()); 
         }
+        int status = response.getStatus();
+        if (status != 200 && status != 201) {
+            System.out.println("En fel uppstod, kunde inte hämta data, statuskod: " + status);
+        }
         
         return response.getBody();
     }
