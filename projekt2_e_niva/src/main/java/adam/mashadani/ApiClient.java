@@ -69,4 +69,10 @@ public class ApiClient {
 
     }
 
+     public static void convertToJavaFormat(String path, Type t, ArrayList list){
+        String jsonData = ApiClient.getData(path);
+        list.clear(); // Säger till att den blir tom igen
+        list = gson.fromJson(jsonData, t);
+    }
+
 }

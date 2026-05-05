@@ -1,5 +1,7 @@
 package adam.mashadani;
 
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 import LibraryManagementPackage.LibraryManager;
@@ -7,16 +9,26 @@ import UserManagementPackage.UserManager;
 
 public class Main {
     public static void main(String[] args) {
+        
         LibraryManager lm = new LibraryManager();
         UserManager um = new UserManager();
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("Välkommen till meny, välj bland alternativen " + "\n" + "1. Skriv ut böcker"
-                    + "\n" + "2. Skriv ut tidnignar" + "\n" + "3. Lägg till en bok" + "\n"
-                    + "4. Lägg till en tidning" + "\n" + "5. Lägg till användare"
-                    + "\n" + "6. Skriv ut alla användare" + "\n" + "7. Visa avstängda användare"
-                    + "\n" + "8. Spärra en användare" + "\n" + "9. Avsluta");
+            System.out.println("\n========================================");
+        System.out.println("       BIBLIOTEKSSYSTEM - ADMIN         ");
+        System.out.println("========================================");
+        System.out.println("  1. 📚 Visa alla böcker      9.  🔍 Sök bok (titel)");
+        System.out.println("  2. 📰 Visa alla tidningar   10. 🔍 Sök tidning (titel)");
+        System.out.println("  3. ➕ Lägg till bok         11. 🔍 Sök användare (email)");
+        System.out.println("  4. ➕ Lägg till tidning");
+        System.out.println("----------------------------------------");
+        System.out.println("  5. 👤 Registrera användare  6.  👥 Visa alla");
+        System.out.println("  7. 🚫 Visa avstängda        8.  🔒 Spärra användare");
+        System.out.println("----------------------------------------");
+        System.out.println("  12. ❌ Avsluta programmet");
+        System.out.println("========================================");
+        System.out.print("Ditt val: ");
             String answer = scanner.nextLine();
             switch (answer) {
                 case "1":
@@ -73,10 +85,10 @@ public class Main {
 
                     break;
                 case "6":
-                    System.out.println(ApiClient.getData("users"));
+                    um.ShowUsersSorted();
                     break;
                 case "7":
-                    System.out.println(ApiClient.getData("suspended"));
+                    um.ShowSuspendedUsers();
                     break;
                 case "8":
                     System.out.print("Ange användarens email: ");
@@ -87,6 +99,21 @@ public class Main {
 
                     System.out.println(um.suspendUser(suspendedEmail, suspendReason));
                     break;
+                case "9":
+                    System.out.println("Ange bokens titel: ");
+                    String titleInput = scanner.nextLine();
+                    System.out.println("Bok: " + lm.showBookByName(titleInput).toString());
+                break;
+                case "10":
+                    System.out.println("Ange tidningens titel: ");
+                    String titleInput2 = scanner.nextLine();
+                    System.out.println("Bok: " + lm.showMagazineByName(titleInput2).toString());
+                break;
+                case "11":
+                    System.out.println("Ange användarens email:");
+                    String emailInput = scanner.nextLine();
+                    System.out.println("Användare: " + um.findUser(emailInput).toString());
+                break;
                 default:
                     break;
             }

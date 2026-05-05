@@ -1,6 +1,7 @@
 package UserManagementPackage;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,23 +16,41 @@ import kong.unirest.UnirestException;
 
 public class UserManager {
     private Map<String, Users> allUsersMap = new HashMap<>();
+    private ArrayList<Users> allUserArrayList = new ArrayList<>();
     private ArrayList<SuspendedUsers> allSuspendedUsers;
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private Type userListType = new TypeToken<ArrayList<Users>>() {
+        }.getType();
 
-    public void SortUserByName() {
-        System.out.println(ApiClient.getData("users"));
+    // Hjälpmetod, hämtar data från server och lagrar i arraylistan i java format
+    public void getUsers(String path, Type t, ArrayList list){
+        String jsonData = ApiClient.getData(path);
+        list.clear(); // Säger till att den blir tom igen
+        list = gson.fromJson(jsonData, t);
+    }
+
+    public void ShowUsersSorted() {
+        getUsers("users", userListType, allUserArrayList);
+        Collections.sort(allUserArrayList);
+        for (Users user : allUserArrayList) {
+            System.out.println(user.getName());
+        }
+    }
+
+    public void ShowSuspendedUsers(){
+        Type suspendedListType = new TypeToken<ArrayList<SuspendedUsers>>() {
+        }.getType();
+        getUsers("suspended", suspendedListType, allSuspendedUsers);
+        for (SuspendedUsers sUser : allSuspendedUsers) {
+            System.out.println("User ID: " + sUser.getUserId() + " Reason: " + sUser.getReason());
+        }
     }
 
     // Hittar en användare och skickar den tillbaka som en objekt
     public Users findUser(String email) {
-        String jsonData = ApiClient.getData("users");
-        Type userListType = new TypeToken<ArrayList<Users>>() {
-        }.getType();
-        ArrayList<Users> temporaryUserList = gson.fromJson(jsonData, userListType);
-
-        allUsersMap.clear();
-        if (temporaryUserList != null) {
-            for (Users user : temporaryUserList) {
+        getUsers("users", userListType, allUserArrayList);
+        if (allUserArrayList != null) {
+            for (Users user : allUserArrayList) {
                 allUsersMap.put(user.getEmail(), user);
             }
         }

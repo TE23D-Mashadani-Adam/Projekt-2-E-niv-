@@ -30,6 +30,13 @@ public class Users implements Comparable{
         this.email = email;
     }
 
+    
+
+    @Override
+    public String toString() {
+        return "Users [id=" + id + ", name=" + name + ", email=" + email + "]";
+    }
+
     @Override
     public int compareTo(Object arg0) {
         // TODO Auto-generated method stub
