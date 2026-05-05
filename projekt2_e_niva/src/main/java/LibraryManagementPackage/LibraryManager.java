@@ -14,19 +14,20 @@ public class LibraryManager {
     private ArrayList<Publications> publicationsList = new ArrayList<Publications>();
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    public void AddBook(String title, Boolean isAvailable, String author,
+    //Lägger till en bok i systemet, returnerar hur det gick
+    public String AddBook(String title, Boolean isAvailable, String author,
             String genre, int pages) {
         Books newBook = new Books(title, isAvailable, author, genre, pages);
-        // Skriver ut ifall processen lyckades eller inte
-        System.out.println(ApiClient.postData("books", newBook));
         publicationsList.add(newBook);
+        return ApiClient.postData("books", newBook);
     }
 
-    public void AddMagazines(String title, Boolean isAvailable, int issueNumber,
+    //Lägger till en tidning i systemet, returnerar hur det gick
+    public String AddMagazines(String title, Boolean isAvailable, int issueNumber,
             String catergory, int publishYear) {
         Magazines newMagazine = new Magazines(title, isAvailable, issueNumber, catergory, publishYear);
-        System.out.println(ApiClient.postData("magazines", newMagazine));
         publicationsList.add(newMagazine);
+        return ApiClient.postData("magazines", newMagazine);
     }
 
     public void showBooks() {

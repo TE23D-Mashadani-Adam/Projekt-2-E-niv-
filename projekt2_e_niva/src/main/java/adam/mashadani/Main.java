@@ -11,12 +11,12 @@ public class Main {
         UserManager um = new UserManager();
         Scanner scanner = new Scanner(System.in);
 
-        
-        
         while (true) {
             System.out.println("Välkommen till meny, välj bland alternativen " + "\n" + "1. Skriv ut böcker"
                     + "\n" + "2. Skriv ut tidnignar" + "\n" + "3. Lägg till en bok" + "\n"
-                    + "4. Lägg till en tidning" + "\n" + "5. Avsluta");
+                    + "4. Lägg till en tidning" + "\n" + "5. Lägg till användare"
+                    + "\n" + "6. Skriv ut alla användare" + "\n" + "7. Visa avstängda användare"
+                    + "\n" + "8. Spärra en användare" + "\n" + "9. Avsluta");
             String answer = scanner.nextLine();
             switch (answer) {
                 case "1":
@@ -61,9 +61,31 @@ public class Main {
 
                     lm.AddMagazines(title2, isAvailable2, issueNumber, category, publishYear);
 
-                    System.out.println("\nTidningen har registrerats!");
                     break;
                 case "5":
+                    System.out.print("Ange namn: ");
+                    String name = scanner.nextLine();
+
+                    System.out.print("Ange email: ");
+                    String email = scanner.nextLine();
+
+                    System.out.println(um.addUser(name, email));
+
+                    break;
+                case "6":
+                    System.out.println(ApiClient.getData("users"));
+                    break;
+                case "7":
+                    System.out.println(ApiClient.getData("suspended"));
+                    break;
+                case "8":
+                    System.out.print("Ange användarens email: ");
+                    String suspendedEmail = scanner.nextLine();
+
+                    System.out.print("Ange anledning för avstängning ");
+                    String suspendReason = scanner.nextLine();
+
+                    System.out.println(um.suspendUser(suspendedEmail, suspendReason));
                     break;
                 default:
                     break;

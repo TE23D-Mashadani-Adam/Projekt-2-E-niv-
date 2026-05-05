@@ -2,11 +2,10 @@ package UserManagementPackage;
 
 public class SuspendedUsers implements Comparable{
     private String id;
-    private int userId;
+    private String userId;
     private String reason;
 
-    public SuspendedUsers(String id, int userId, String reason) {
-        this.id = id;
+    public SuspendedUsers(String userId, String reason) {
         this.userId = userId;
         this.reason = reason;
     }
@@ -15,7 +14,7 @@ public class SuspendedUsers implements Comparable{
         return id;
     }
 
-    public int getUserId() {
+    public String getUserId() {
         return userId;
     }
 

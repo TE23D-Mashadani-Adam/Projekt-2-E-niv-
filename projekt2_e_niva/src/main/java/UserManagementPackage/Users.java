@@ -5,8 +5,7 @@ public class Users implements Comparable{
     private String name;
     private String email;
 
-    public Users(String id, String name, String email) {
-        this.id = id;
+    public Users(String name, String email) {
         this.name = name;
         this.email = email;
     }
