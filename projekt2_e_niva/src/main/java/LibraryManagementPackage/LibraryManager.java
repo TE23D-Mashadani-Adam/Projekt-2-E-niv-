@@ -23,29 +23,32 @@ public class LibraryManager {
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     private Type booksListType = new TypeToken<ArrayList<Books>>() {
-        }.getType();
+    }.getType();
     private Type magazineListType = new TypeToken<ArrayList<Magazines>>() {
-        }.getType();
+    }.getType();
 
-    //Lägger till en bok i systemet, returnerar hur det gick
+    private final String bookPath = "books";
+    private final String magazinePath = "magazines";
+
+    // Lägger till en bok i systemet, returnerar hur det gick
     public String AddBook(String title, Boolean isAvailable, String author,
             String genre, int pages) {
         Books newBook = new Books(title, isAvailable, author, genre, pages);
         publicationsList.add(newBook);
-        return ApiClient.postData("books", newBook);
+        return ApiClient.postData(bookPath, newBook);
     }
 
-    //Lägger till en tidning i systemet, returnerar hur det gick
+    // Lägger till en tidning i systemet, returnerar hur det gick
     public String AddMagazines(String title, Boolean isAvailable, int issueNumber,
             String catergory, int publishYear) {
         Magazines newMagazine = new Magazines(title, isAvailable, issueNumber, catergory, publishYear);
         publicationsList.add(newMagazine);
-        return ApiClient.postData("magazines", newMagazine);
+        return ApiClient.postData(magazinePath, newMagazine);
     }
 
     public void showBooks() {
-        
-        String jsonData = ApiClient.getData("books");
+
+        String jsonData = ApiClient.getData(bookPath);
         ArrayList<Books> books = gson.fromJson(jsonData, booksListType);
         publicationsList.clear();
         publicationsList.addAll(books);
@@ -57,33 +60,47 @@ public class LibraryManager {
         }
     }
 
-    public <T extends Publications> T findByName(String path, Type t, ArrayList<T> list, Map<String,T> map, 
-        String title){
-           ApiClient.convertToJavaFormat(path, t, list);
-        if (list != null) {
+    public <T extends Publications> T findByName(String path, Type t, ArrayList<T> list, Map<String, T> map,
+            String title) {
+        ApiClient.convertToJavaFormat(path, t, list);
+        if (list != null && map.containsKey(title)) {
             for (T item : list) {
-                map.put(title, item);
+                map.put(item.getTitle(), item);
             }
+        }else if(!map.containsKey(title) && list != null){
+            System.out.println("Titeln hittades inte, kontrollera att du skrev rätt titel");
+        }else if(map.containsKey(title) && list == null){
+            System.out.println("Hittade inga böcker på servern");
         }
 
         if (map.containsKey(title)) {
             return map.get(title);
-        }else{
+        } else {
             return null;
         }
     }
 
-    public Books showBookByName(String title){
-        return findByName("books", booksListType, bookArrayList, bookMapList, title);
+    public String showBookByName(String title) {
+        Books book = findByName(bookPath, booksListType, bookArrayList, bookMapList, title);
+        if (book != null) {
+            return book.getInfo();
+        }else{
+            return "Bok hittade ej!";
+        }
 
     }
 
-    public Magazines showMagazineByName(String title){
-        return findByName("magazines", magazineListType, magazinesArrayLisy, magazineMapList, title);
+    public String showMagazineByName(String title) {
+        Magazines magazine = findByName(magazinePath, magazineListType, magazinesArrayLisy, magazineMapList, title);
+        if (magazine != null) {
+            return magazine.getInfo();
+        }else{
+            return "Tidning hittades ej!";
+        }
     }
 
     public void showMagazines() {
-        String jsonData = ApiClient.getData("magazines");
+        String jsonData = ApiClient.getData(magazinePath);
         ArrayList<Magazines> magazines = gson.fromJson(jsonData, magazineListType);
         publicationsList.clear();
         publicationsList.addAll(magazines);
@@ -92,6 +109,24 @@ public class LibraryManager {
                 Magazines m = (Magazines) p;
                 System.out.println(m.getTitle());
             }
+        }
+    }
+
+    public void deleteBook(String id) {
+        String responseMessage = ApiClient.deleteData(bookPath, id);
+        if (responseMessage == "") {
+            System.out.println("Bok borttagen!");
+        } else {
+            System.out.println(responseMessage);
+        }
+    }
+
+    public void deleteMagazine(String id) {
+        String responseMessage = ApiClient.deleteData(magazinePath, id);
+        if (responseMessage == "") {
+            System.out.println("Tidning borttagen!");
+        } else {
+            System.out.println(responseMessage);
         }
     }
 }

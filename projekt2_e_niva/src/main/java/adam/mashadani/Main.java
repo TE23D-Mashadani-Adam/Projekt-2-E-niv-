@@ -9,26 +9,28 @@ import UserManagementPackage.UserManager;
 
 public class Main {
     public static void main(String[] args) {
-        
+
         LibraryManager lm = new LibraryManager();
         UserManager um = new UserManager();
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("\n========================================");
-        System.out.println("       BIBLIOTEKSSYSTEM - ADMIN         ");
-        System.out.println("========================================");
-        System.out.println("  1. 📚 Visa alla böcker      9.  🔍 Sök bok (titel)");
-        System.out.println("  2. 📰 Visa alla tidningar   10. 🔍 Sök tidning (titel)");
-        System.out.println("  3. ➕ Lägg till bok         11. 🔍 Sök användare (email)");
-        System.out.println("  4. ➕ Lägg till tidning");
-        System.out.println("----------------------------------------");
-        System.out.println("  5. 👤 Registrera användare  6.  👥 Visa alla");
-        System.out.println("  7. 🚫 Visa avstängda        8.  🔒 Spärra användare");
-        System.out.println("----------------------------------------");
-        System.out.println("  12. ❌ Avsluta programmet");
-        System.out.println("========================================");
-        System.out.print("Ditt val: ");
+            System.out.println("\n========================================================");
+            System.out.println("                BIBLIOTEKSSYSTEM - ADMIN                ");
+            System.out.println("========================================================");
+            System.out.println("  1. Visa alla böcker           9.  Sök bok (titel)");
+            System.out.println("  2. Visa alla tidningar        10. Sök tidning (titel)");
+            System.out.println("  3. Lägg till bok              11. Sök användare (email)");
+            System.out.println("  4. Lägg till tidning          12. [!] TA BORT BOK");
+            System.out.println("                                13. [!] TA BORT TIDNING");
+            System.out.println("--------------------------------------------------------");
+            System.out.println("  5. Registrera användare       6.  Visa alla användare");
+            System.out.println("  7. Visa avstängda             8.  Spärra användare");
+            System.out.println("  14. Aktivera spärrad användare 15. [!] TA BORT ANVÄNDARE");
+            System.out.println("--------------------------------------------------------");
+            System.out.println("  0. AVSLUTA PROGRAMMET");
+            System.out.println("========================================================");
+            System.out.print("Ditt val: ");
             String answer = scanner.nextLine();
             switch (answer) {
                 case "1":
@@ -102,18 +104,38 @@ public class Main {
                 case "9":
                     System.out.println("Ange bokens titel: ");
                     String titleInput = scanner.nextLine();
-                    System.out.println("Bok: " + lm.showBookByName(titleInput).toString());
-                break;
+                    System.out.println("Bok: " + lm.showBookByName(titleInput));
+                    break;
                 case "10":
                     System.out.println("Ange tidningens titel: ");
                     String titleInput2 = scanner.nextLine();
-                    System.out.println("Bok: " + lm.showMagazineByName(titleInput2).toString());
-                break;
+                    System.out.println("Bok: " + lm.showMagazineByName(titleInput2));
+                    break;
                 case "11":
                     System.out.println("Ange användarens email:");
                     String emailInput = scanner.nextLine();
-                    System.out.println("Användare: " + um.findUser(emailInput).toString());
-                break;
+                    System.out.println("Användare: " + um.ShowUserByName(emailInput));
+                    break;
+                case "12":
+                    System.out.println("Ange bokens id:");
+                    String idInputBook = scanner.nextLine();
+                    lm.deleteBook(idInputBook);
+                    break;
+                case "13":
+                    System.out.println("Ange tidningens id:");
+                    String idInputMagazine = scanner.nextLine();
+                    lm.deleteMagazine(idInputMagazine);
+                    break;
+                case "14":
+                    System.out.println("Ange den avstängda användarens id:");
+                    String suspendedUseridInput = scanner.nextLine();
+                    um.activateSuspendedUser(suspendedUseridInput);
+                    break;
+                case "15":
+                    System.out.println("Ange den avstängda användarens id:");
+                    String userIdInput = scanner.nextLine();
+                    um.deleteUser(userIdInput);
+                    break;
                 default:
                     break;
             }

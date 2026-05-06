@@ -1,10 +1,10 @@
 package LibraryManagementPackage;
 
-public class Books extends Publications{
+public class Books extends Publications {
     private String author;
     private String genre;
     private int pages;
-    
+
     public Books(String title, Boolean isAvailable, String author, String genre, int pages) {
         super(title, isAvailable);
         this.author = author;
@@ -14,7 +14,7 @@ public class Books extends Publications{
 
     @Override
     public String getInfo() {
-        return null;
+        return "Books [author=" + author + ", genre=" + genre + ", pages=" + pages + "]";
     }
 
     public String getAuthor() {
@@ -46,9 +46,5 @@ public class Books extends Publications{
         // TODO Auto-generated method stub
         return 0;
     }
-
-    
-
-    
 
 }

@@ -14,7 +14,8 @@ public class Magazines extends Publications{
 
     @Override
     public String getInfo() {
-        return null;
+        return "Magazines [issueNumber=" + issueNumber + ", category=" + category + ", publishYear=" + publishYear
+                + "]";
     }
 
     public int getIssueNumber() {

@@ -58,7 +58,7 @@ public class ApiClient {
 
     // Tar bort önskad data från servern
     public static String deleteData(String path, String id) {
-        String returnMessage = "";
+        String returnMessage = "Data deleted";
         try {
             int responseStatus = Unirest.delete(base_url + path + "/" + id).asEmpty().getStatus();
         } catch (UnirestException e) {
@@ -71,8 +71,15 @@ public class ApiClient {
 
      public static void convertToJavaFormat(String path, Type t, ArrayList list){
         String jsonData = ApiClient.getData(path);
-        list.clear(); // Säger till att den blir tom igen
-        list = gson.fromJson(jsonData, t);
+
+        if (jsonData != null) {
+            ArrayList TemporaryList = gson.fromJson(jsonData, t);
+            list.clear(); // Säger till att den blir tom igen
+            if (TemporaryList != null) {
+                list.addAll(TemporaryList);
+            }
+        }
+        
     }
 
 }
