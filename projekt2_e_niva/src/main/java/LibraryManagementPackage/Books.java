@@ -42,9 +42,9 @@ public class Books extends Publications {
     }
 
     @Override
-    public int compareTo(Object arg0) {
-        // TODO Auto-generated method stub
-        return 0;
+    public int compareTo(Object o) {
+        Books otherBook = (Books) o;
+        return this.getTitle().compareTo(otherBook.getTitle());
     }
 
 }

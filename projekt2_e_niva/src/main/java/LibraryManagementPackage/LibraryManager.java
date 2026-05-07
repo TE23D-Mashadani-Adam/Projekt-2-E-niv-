@@ -1,6 +1,7 @@
 package LibraryManagementPackage;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +36,12 @@ public class LibraryManager {
             String genre, int pages) {
         Books newBook = new Books(title, isAvailable, author, genre, pages);
         publicationsList.add(newBook);
-        return ApiClient.postData(bookPath, newBook);
+        String responseMessage = ApiClient.postData(bookPath, newBook);
+        if (responseMessage == "Data skickad") {
+            return "Bok tillagd!";
+        } else {
+            return responseMessage;
+        }
     }
 
     // Lägger till en tidning i systemet, returnerar hur det gick
@@ -43,7 +49,12 @@ public class LibraryManager {
             String catergory, int publishYear) {
         Magazines newMagazine = new Magazines(title, isAvailable, issueNumber, catergory, publishYear);
         publicationsList.add(newMagazine);
-        return ApiClient.postData(magazinePath, newMagazine);
+        String responseMessage = ApiClient.postData(magazinePath, newMagazine);
+        if (responseMessage == "Data skickad") {
+            return "Tdining tillagd!";
+        } else {
+            return responseMessage;
+        }
     }
 
     public void showBooks() {
@@ -52,6 +63,7 @@ public class LibraryManager {
         ArrayList<Books> books = gson.fromJson(jsonData, booksListType);
         publicationsList.clear();
         publicationsList.addAll(books);
+        Collections.sort(publicationsList);
         for (Publications p : publicationsList) {
             if (p instanceof Books) {
                 Books b = (Books) p;
@@ -67,9 +79,9 @@ public class LibraryManager {
             for (T item : list) {
                 map.put(item.getTitle(), item);
             }
-        }else if(!map.containsKey(title) && list != null){
+        } else if (!map.containsKey(title) && list != null) {
             System.out.println("Titeln hittades inte, kontrollera att du skrev rätt titel");
-        }else if(map.containsKey(title) && list == null){
+        } else if (map.containsKey(title) && list == null) {
             System.out.println("Hittade inga böcker på servern");
         }
 
@@ -84,7 +96,7 @@ public class LibraryManager {
         Books book = findByName(bookPath, booksListType, bookArrayList, bookMapList, title);
         if (book != null) {
             return book.getInfo();
-        }else{
+        } else {
             return "Bok hittade ej!";
         }
 
@@ -94,7 +106,7 @@ public class LibraryManager {
         Magazines magazine = findByName(magazinePath, magazineListType, magazinesArrayLisy, magazineMapList, title);
         if (magazine != null) {
             return magazine.getInfo();
-        }else{
+        } else {
             return "Tidning hittades ej!";
         }
     }
@@ -104,6 +116,7 @@ public class LibraryManager {
         ArrayList<Magazines> magazines = gson.fromJson(jsonData, magazineListType);
         publicationsList.clear();
         publicationsList.addAll(magazines);
+        Collections.sort(publicationsList);
         for (Publications p : publicationsList) {
             if (p instanceof Magazines) {
                 Magazines m = (Magazines) p;

@@ -17,7 +17,7 @@ public class ApiClient {
 
     // Skapar ny data objekt på servern och skickar tillbaka eventuella fel
     public static String postData(String path, Object data) {
-        String returnMessage = "Data skickad!";
+        String returnMessage = "Data skickad";
         try {
             String jsonBody = gson.toJson(data);
 

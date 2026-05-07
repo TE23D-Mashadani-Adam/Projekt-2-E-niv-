@@ -20,32 +20,20 @@ public class UserManager {
     private ArrayList<SuspendedUsers> allSuspendedUsers = new ArrayList<>();
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private Type userListType = new TypeToken<ArrayList<Users>>() {
-        }.getType();
-
-    // Hjälpmetod, hämtar data från server och lagrar i arraylistan i java format
-    public void getUsers(String path, Type t, ArrayList list){
-        String jsonData = ApiClient.getData(path);
-        if (jsonData != null) {
-            ArrayList temporaryList = gson.fromJson(jsonData, t);
-            list.clear(); // Säger till att den blir tom igen
-            if (temporaryList != null) {
-                list.addAll(temporaryList);
-            }
-        }
-    }
+    }.getType();    
 
     public void ShowUsersSorted() {
-        getUsers("users", userListType, allUserArrayList);
+        ApiClient.convertToJavaFormat("users", userListType, allUserArrayList);
         Collections.sort(allUserArrayList);
         for (Users user : allUserArrayList) {
             System.out.println(user.getName());
         }
     }
 
-    public void ShowSuspendedUsers(){
+    public void ShowSuspendedUsers() {
         Type suspendedListType = new TypeToken<ArrayList<SuspendedUsers>>() {
         }.getType();
-        getUsers("suspended", suspendedListType, allSuspendedUsers);
+        ApiClient.convertToJavaFormat("suspended", suspendedListType, allSuspendedUsers);
         for (SuspendedUsers sUser : allSuspendedUsers) {
             System.out.println("User ID: " + sUser.getUserId() + " Reason: " + sUser.getReason());
         }
@@ -53,37 +41,41 @@ public class UserManager {
 
     // Hittar en användare och skickar den tillbaka som en objekt
     public Users findUser(String email) {
-        getUsers("users", userListType, allUserArrayList);
+        ApiClient.convertToJavaFormat("users", userListType, allUserArrayList);
         if (allUserArrayList != null && allUsersMap.containsKey(email)) {
             for (Users user : allUserArrayList) {
                 allUsersMap.put(user.getEmail(), user);
             }
-        }else if (!allUsersMap.containsKey(email) && allUserArrayList != null) {
-            System.out.println("Hittade inte skriven email, kontrollera din stavning");
-        }else if (allUsersMap.containsKey(email) && allUserArrayList == null){
-            System.out.println("Inga användare hittade på servern");
-        }
-
-        if (allUsersMap.containsKey(email)) {
             return allUsersMap.get(email);
+
+        } else if (!allUsersMap.containsKey(email) && allUserArrayList != null) {
+            System.out.println("Hittade inte skriven email, kontrollera din stavning");
+            return null;
+        } else if (allUsersMap.containsKey(email) && allUserArrayList == null) {
+            System.out.println("Inga användare hittade på servern");
+            return null;
         } else {
             return null;
         }
-
     }
 
-    public String ShowUserByName(String email){
+    public String ShowUserByName(String email) {
         Users user = findUser(email);
         if (user != null) {
             return user.toString();
-        }else{
+        } else {
             return "Ej hittad";
         }
     }
 
     public String addUser(String name, String email) {
         Users user = new Users(name, email);
-        return ApiClient.postData("users", user);
+        String responseMessage = ApiClient.postData("users", user);
+        if (responseMessage == "Data skickad") {
+            return "Användare skapad!";
+        } else {
+            return responseMessage;
+        }
     }
 
     public String suspendUser(String email, String reason) {
@@ -91,27 +83,32 @@ public class UserManager {
         Users user = findUser(email);
         if (user != null) {
             SuspendedUsers supendedUser = new SuspendedUsers(user.getId(), reason);
-            return ApiClient.postData("suspended", supendedUser);
-        }else{
+            String responseMessage = ApiClient.postData("suspended", supendedUser);
+            if (responseMessage == "Data skickad!") {
+                return "Användare har blivit avstängd!";
+            } else {
+                return responseMessage;
+            }
+        } else {
             return "Användaren hittades inte, kontrollera att du skrev rätt email!";
         }
 
     }
 
-    public void activateSuspendedUser(String id){
+    public void activateSuspendedUser(String id) {
         String responseMessage = ApiClient.deleteData("suspended", id);
         if (responseMessage == "") {
             System.out.println("Användare aktiverad");
-        }else{
+        } else {
             System.out.println(responseMessage);
         }
     }
 
-    public void deleteUser(String id){
+    public void deleteUser(String id) {
         String responseMessage = ApiClient.deleteData("users", id);
         if (responseMessage == "") {
             System.out.println("Användare togs bort!");
-        }else{
+        } else {
             System.out.println(responseMessage);
         }
     }

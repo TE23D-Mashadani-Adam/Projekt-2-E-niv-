@@ -38,9 +38,9 @@ public class Users implements Comparable{
     }
 
     @Override
-    public int compareTo(Object arg0) {
-        // TODO Auto-generated method stub
-        return 0;
+    public int compareTo(Object o) {
+        Users otherUser = (Users) o;
+        return this.name.compareTo(otherUser.getName());
     }
 
     
