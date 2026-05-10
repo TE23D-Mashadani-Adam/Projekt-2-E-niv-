@@ -75,21 +75,24 @@ public class LibraryManager {
     public <T extends Publications> T findByName(String path, Type t, ArrayList<T> list, Map<String, T> map,
             String title) {
         ApiClient.convertToJavaFormat(path, t, list);
-        if (list != null && map.containsKey(title)) {
+        if (list != null) {
             for (T item : list) {
                 map.put(item.getTitle(), item);
             }
-        } else if (!map.containsKey(title) && list != null) {
-            System.out.println("Titeln hittades inte, kontrollera att du skrev rätt titel");
+        } 
+         if (map.containsKey(title) && list != null) {
+            return map.get(title);
         } else if (map.containsKey(title) && list == null) {
             System.out.println("Hittade inga böcker på servern");
-        }
-
-        if (map.containsKey(title)) {
-            return map.get(title);
-        } else {
+            return null;
+        }else if(!map.containsKey(title) && list != null){
+            System.out.println("Email hittades ej, kontrollera din stavning");
+            return null;
+        }else{
             return null;
         }
+
+        
     }
 
     public String showBookByName(String title) {

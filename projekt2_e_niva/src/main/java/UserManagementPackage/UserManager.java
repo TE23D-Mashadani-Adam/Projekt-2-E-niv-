@@ -20,7 +20,7 @@ public class UserManager {
     private ArrayList<SuspendedUsers> allSuspendedUsers = new ArrayList<>();
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
     private Type userListType = new TypeToken<ArrayList<Users>>() {
-    }.getType();    
+    }.getType();
 
     public void ShowUsersSorted() {
         ApiClient.convertToJavaFormat("users", userListType, allUserArrayList);
@@ -42,19 +42,19 @@ public class UserManager {
     // Hittar en användare och skickar den tillbaka som en objekt
     public Users findUser(String email) {
         ApiClient.convertToJavaFormat("users", userListType, allUserArrayList);
-        if (allUserArrayList != null && allUsersMap.containsKey(email)) {
+        if (allUserArrayList != null) {
             for (Users user : allUserArrayList) {
                 allUsersMap.put(user.getEmail(), user);
             }
-            return allUsersMap.get(email);
-
-        } else if (!allUsersMap.containsKey(email) && allUserArrayList != null) {
-            System.out.println("Hittade inte skriven email, kontrollera din stavning");
+        }else{
+            System.out.println("Hittade inga användare på servern");
+        }
+        if (allUsersMap.containsKey(email) && allUserArrayList != null) {
+             return allUsersMap.get(email);
+        } else if (!allUsersMap.containsKey(email)&& allUserArrayList != null){
+            System.out.println("Hittade inte skriven email på servern, kontrollera gärna stavning");
             return null;
-        } else if (allUsersMap.containsKey(email) && allUserArrayList == null) {
-            System.out.println("Inga användare hittade på servern");
-            return null;
-        } else {
+        }else{
             return null;
         }
     }

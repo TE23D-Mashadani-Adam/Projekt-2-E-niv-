@@ -27,7 +27,6 @@ public class Main {
                     break;
                 case "3":
                     handleAddBook(lm, scanner);
-
                     break;
                 case "4":
                     handleAddMagazines(lm, scanner);
@@ -49,6 +48,7 @@ public class Main {
                     break;
                 case "10":
                     handleSearchMagazine(lm, scanner);
+                    break;
                 case "11":
                     handleSearchUser(um, scanner);
                     break;
@@ -71,6 +71,7 @@ public class Main {
 
     }
 
+    //Kontrollerar att användaren skrivit rätt integer input för att undvika programkrasch
     private static int getIntInput(String prompt, Scanner scanner) {
         while (true) {
             try {
