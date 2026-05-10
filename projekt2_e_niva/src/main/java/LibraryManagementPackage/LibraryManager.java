@@ -62,14 +62,18 @@ public class LibraryManager {
     public void showBooks() {
 
         String jsonData = ApiClient.getData(bookPath);
-        ArrayList<Books> books = gson.fromJson(jsonData, booksListType);
-        publicationsList.clear();
-        publicationsList.addAll(books);
-        Collections.sort(publicationsList);
-        for (Publications p : publicationsList) {
-            if (p instanceof Books) {
-                Books b = (Books) p;
-                System.out.println(b.getTitle());
+        if (jsonData != null) {
+
+            ArrayList<Books> books = gson.fromJson(jsonData, booksListType);
+
+            publicationsList.clear();
+            publicationsList.addAll(books);
+            Collections.sort(publicationsList);
+            for (Publications p : publicationsList) {
+                if (p instanceof Books) {
+                    Books b = (Books) p;
+                    System.out.println(b.getTitle());
+                }
             }
         }
     }
@@ -81,20 +85,22 @@ public class LibraryManager {
             for (T item : list) {
                 map.put(item.getTitle(), item);
             }
-        } 
-         if (map.containsKey(title) && list != null) {
-            return map.get(title);
-        } else if (map.containsKey(title) && list == null) {
-            System.out.println("Hittade inga böcker på servern");
-            return null;
-        }else if(!map.containsKey(title) && list != null){
-            System.out.println("Email hittades ej, kontrollera din stavning");
-            return null;
-        }else{
+
+            if (map.containsKey(title) && list != null) {
+                return map.get(title);
+            } else if (map.containsKey(title) && list == null) {
+                System.out.println("Hittade inga böcker på servern");
+                return null;
+            } else if (!map.containsKey(title) && list != null && !list.isEmpty()) {
+                System.out.println("Titeln hittades ej, kontrollera din stavning");
+                return null;
+            } else {
+                return null;
+            }
+        } else {
             return null;
         }
 
-        
     }
 
     public String showBookByName(String title) {
@@ -105,6 +111,16 @@ public class LibraryManager {
             return "Bok hittade ej!";
         }
 
+    }
+
+    public Books getBookByName(String title) {
+        Books book = findByName(bookPath, booksListType, bookArrayList, bookMapList, title);
+        return book;
+    }
+
+    public Magazines getMagazineByName(String title) {
+        Magazines magazine = findByName(title, magazineListType, magazinesArrayLisy, magazineMapList, title);
+        return magazine;
     }
 
     public String showMagazineByName(String title) {

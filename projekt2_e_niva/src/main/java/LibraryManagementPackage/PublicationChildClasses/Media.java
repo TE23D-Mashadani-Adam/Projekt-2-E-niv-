@@ -72,6 +72,13 @@ public class Media extends Publications {
         this.isAvailbe = isAvailbe;
     }
 
+    @Override
+    public String getTypeByName() {
+        return this.type;
+    }
+
+    
+
   
     
 

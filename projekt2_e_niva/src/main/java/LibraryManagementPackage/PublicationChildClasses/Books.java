@@ -43,6 +43,11 @@ public class Books extends Publications {
         this.pages = pages;
     }
 
+    @Override
+    public String getTypeByName() {
+        return "Boken";
+    }
+
   
     
 

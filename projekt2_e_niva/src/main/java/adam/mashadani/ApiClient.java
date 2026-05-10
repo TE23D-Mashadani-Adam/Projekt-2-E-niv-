@@ -51,6 +51,7 @@ public class ApiClient {
             } 
         } catch (UnirestException e) {
             System.out.println("Kunde inte nå servern, felkod: " + e.getLocalizedMessage());
+            return null;
         }
 
         return response.getBody();
@@ -69,6 +70,7 @@ public class ApiClient {
 
     }
 
+    //Konverterar json data till java format och sparar i arraylista
      public static void convertToJavaFormat(String path, Type t, ArrayList list){
         String jsonData = ApiClient.getData(path);
 

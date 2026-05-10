@@ -45,15 +45,16 @@ public abstract class Publications implements Comparable<Publications>, Borrowab
 
     @Override
     public boolean isAvailabe() {
-        // TODO Auto-generated method stub
-        return false;
+        return this.isAvailabe();
     }
 
     @Override
     public void setAvailable(boolean available) {
-        // TODO Auto-generated method stub
-        
+        this.isAvailable = available;
     }
+
+    public abstract String getTypeByName();
+
 
    
     

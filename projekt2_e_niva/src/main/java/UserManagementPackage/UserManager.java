@@ -49,11 +49,11 @@ public class UserManager {
                 allUsersMap.put(user.getEmail(), user);
             }
         }else{
-            System.out.println("Hittade inga användare på servern");
+            System.out.println("Hittade inga användare");
         }
         if (allUsersMap.containsKey(email) && allUserArrayList != null) {
              return allUsersMap.get(email);
-        } else if (!allUsersMap.containsKey(email)&& allUserArrayList != null){
+        } else if (!allUsersMap.containsKey(email) && allUserArrayList != null && !allUserArrayList.isEmpty()){
             System.out.println("Hittade inte skriven email på servern, kontrollera gärna stavning");
             return null;
         }else{

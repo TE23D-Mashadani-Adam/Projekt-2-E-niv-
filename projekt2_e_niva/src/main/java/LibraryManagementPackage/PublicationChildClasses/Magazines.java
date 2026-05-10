@@ -44,6 +44,11 @@ public class Magazines extends Publications{
         this.publishYear = publishYear;
     }
 
+    @Override
+    public String getTypeByName() {
+        return "Tidningen";
+    }
+
   
 
 

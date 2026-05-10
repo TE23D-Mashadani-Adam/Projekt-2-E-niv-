@@ -1,10 +1,14 @@
 package adam.mashadani;
 
+import UserManagementPackage.Users;
+
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 import LibraryManagementPackage.LibraryManager;
+import LibraryManagementPackage.LoanFromLibraryManagement.LoanManager;
+import LibraryManagementPackage.PublicationChildClasses.Books;
 import UserManagementPackage.UserManager;
 
 public class Main {
@@ -12,6 +16,7 @@ public class Main {
 
         LibraryManager lm = new LibraryManager();
         UserManager um = new UserManager();
+        LoanManager loanManager = new LoanManager();
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -64,14 +69,38 @@ public class Main {
                 case "15":
                     handleRemoveUser(um, scanner);
                     break;
-                default:
+                case "16":
+                    int loanAnswer = getIntInput("Ange vilken typ du vill låna:"
+                            + "\n" + "1. Bok" + "\n" + "2. Tidning" + "\n" + "3. Media", scanner);
+                    if (loanAnswer == 1) {
+                        System.out.println("Ange bokens namn:");
+                        String loanBookAnswer = scanner.nextLine();
+                        System.out.println("Ange din email:");
+                        String bokEmailAnswer = scanner.nextLine();
+
+                        Users user = um.findUser(bokEmailAnswer);
+                        Books book = lm.getBookByName(loanBookAnswer);
+
+                        loanManager.registerLoan(user, book);
+                    }else if(loanAnswer == 2){
+                        
+                    }
                     break;
+                case "17":
+
+                    break;
+                case "18":
+
+                    break;
+                default:
+                    return; // Avslutar programmet
             }
         }
 
     }
 
-    //Kontrollerar att användaren skrivit rätt integer input för att undvika programkrasch
+    // Kontrollerar att användaren skrivit rätt integer input för att undvika
+    // programkrasch
     private static int getIntInput(String prompt, Scanner scanner) {
         while (true) {
             try {
@@ -180,6 +209,9 @@ public class Main {
         System.out.println("  5. Registrera användare       6.  Visa alla användare");
         System.out.println("  7. Visa avstängda             8.  Spärra användare");
         System.out.println("  14. Aktivera spärrad användare 15. [!] TA BORT ANVÄNDARE");
+        System.out.println("--------------------------------------------------------");
+        System.out.println("  16. LÅNA       17. ÅTERLÄMNA");
+        System.out.println("  18. Visa alla aktiva lån");
         System.out.println("--------------------------------------------------------");
         System.out.println("  0. AVSLUTA PROGRAMMET");
         System.out.println("========================================================");
