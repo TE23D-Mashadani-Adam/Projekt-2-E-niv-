@@ -9,6 +9,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
+import LibraryManagementPackage.PublicationChildClasses.Books;
+import LibraryManagementPackage.PublicationChildClasses.Magazines;
 import adam.mashadani.ApiClient;
 
 import java.lang.reflect.Type;

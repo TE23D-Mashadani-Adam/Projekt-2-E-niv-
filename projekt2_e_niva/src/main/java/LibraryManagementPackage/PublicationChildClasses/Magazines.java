@@ -1,4 +1,6 @@
-package LibraryManagementPackage;
+package LibraryManagementPackage.PublicationChildClasses;
+
+import LibraryManagementPackage.Publications;
 
 public class Magazines extends Publications{
     private int issueNumber;
@@ -42,11 +44,8 @@ public class Magazines extends Publications{
         this.publishYear = publishYear;
     }
 
-    @Override
-    public int compareTo(Object o) {
-        Magazines otherMagazine = (Magazines) o;
-        return this.getTitle().compareTo(otherMagazine.getTitle());
-    }
+  
+
 
     
 

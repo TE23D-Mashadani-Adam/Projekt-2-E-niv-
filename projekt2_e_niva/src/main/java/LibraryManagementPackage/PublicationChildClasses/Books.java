@@ -1,4 +1,6 @@
-package LibraryManagementPackage;
+package LibraryManagementPackage.PublicationChildClasses;
+
+import LibraryManagementPackage.Publications;
 
 public class Books extends Publications {
     private String author;
@@ -41,10 +43,7 @@ public class Books extends Publications {
         this.pages = pages;
     }
 
-    @Override
-    public int compareTo(Object o) {
-        Books otherBook = (Books) o;
-        return this.getTitle().compareTo(otherBook.getTitle());
-    }
+  
+    
 
 }

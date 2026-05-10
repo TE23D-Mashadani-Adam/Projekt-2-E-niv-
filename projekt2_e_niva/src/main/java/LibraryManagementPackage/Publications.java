@@ -1,6 +1,8 @@
 package LibraryManagementPackage;
 
-public abstract class Publications implements Comparable {
+import LibraryManagementPackage.LoanFromLibraryManagement.Borrowable;
+
+public abstract class Publications implements Comparable<Publications>, Borrowable {
     private String id;
     private String title;
     private Boolean isAvailable;
@@ -35,5 +37,25 @@ public abstract class Publications implements Comparable {
     public void setIsAvailable(Boolean isAvailable) {
         this.isAvailable = isAvailable;
     }
+
+    @Override
+    public int compareTo(Publications other) {
+        return this.title.compareToIgnoreCase(other.title);
+    }
+
+    @Override
+    public boolean isAvailabe() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    @Override
+    public void setAvailable(boolean available) {
+        // TODO Auto-generated method stub
+        
+    }
+
+   
+    
 
 }
