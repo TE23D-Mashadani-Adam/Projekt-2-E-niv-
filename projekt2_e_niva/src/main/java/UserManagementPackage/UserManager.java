@@ -48,15 +48,15 @@ public class UserManager {
             for (Users user : allUserArrayList) {
                 allUsersMap.put(user.getEmail(), user);
             }
-        }else{
+        } else {
             System.out.println("Hittade inga användare");
         }
         if (allUsersMap.containsKey(email) && allUserArrayList != null) {
-             return allUsersMap.get(email);
-        } else if (!allUsersMap.containsKey(email) && allUserArrayList != null && !allUserArrayList.isEmpty()){
+            return allUsersMap.get(email);
+        } else if (!allUsersMap.containsKey(email) && allUserArrayList != null && !allUserArrayList.isEmpty()) {
             System.out.println("Hittade inte skriven email på servern, kontrollera gärna stavning");
             return null;
-        }else{
+        } else {
             return null;
         }
     }

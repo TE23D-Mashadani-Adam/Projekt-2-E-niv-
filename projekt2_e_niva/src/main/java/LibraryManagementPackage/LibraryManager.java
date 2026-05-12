@@ -89,10 +89,7 @@ public class LibraryManager {
             if (map.containsKey(title) && list != null) {
                 return map.get(title);
             } else if (map.containsKey(title) && list == null) {
-                System.out.println("Hittade inga böcker på servern");
-                return null;
-            } else if (!map.containsKey(title) && list != null && !list.isEmpty()) {
-                System.out.println("Titeln hittades ej, kontrollera din stavning");
+                System.out.println("Servern är tom");
                 return null;
             } else {
                 return null;
@@ -115,7 +112,12 @@ public class LibraryManager {
 
     public Books getBookByName(String title) {
         Books book = findByName(bookPath, booksListType, bookArrayList, bookMapList, title);
-        return book;
+        if (book != null) {
+            return book;
+        }else{
+            System.out.println("Boken hittades ej, kontrollera att du skrev in rätt titel!");
+            return null;
+        }
     }
 
     public Magazines getMagazineByName(String title) {

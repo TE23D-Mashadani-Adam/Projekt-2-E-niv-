@@ -23,6 +23,9 @@ import UserManagementPackage.Users;
 
 import java.io.FileWriter;
 import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import adam.mashadani.ApiClient;
 import kong.unirest.UnirestException;
@@ -31,17 +34,18 @@ import kong.unirest.UnirestException;
 public class LoanManager {
 
     private String suspendedUserPath = "suspended";
-    private Type userListType = new TypeToken<ArrayList<Users>>(){}.getType();
-    private String loansFilePath = "active_loans.json";
+    private Type suspendedUserListType = new TypeToken<ArrayList<SuspendedUsers>>(){}.getType();
+    private String loansFilePath = "active_loans.txt";
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
  
     public String checkUserStatus(Users user){
         String jsonData = ApiClient.getData(suspendedUserPath);
         ArrayList<SuspendedUsers> suspendedUsersList = new ArrayList<>();
-        ApiClient.convertToJavaFormat(jsonData, userListType, suspendedUsersList);
+        ApiClient.convertToJavaFormat(suspendedUserPath, suspendedUserListType, suspendedUsersList);
         String userStatus = "active";
 
+        
         for (SuspendedUsers suspendedUser : suspendedUsersList) {
             if (suspendedUser.getUserId().equals(user.getId())) {
                 userStatus = "suspended";
@@ -60,8 +64,9 @@ public class LoanManager {
 
         if (checkUserStatus(user).equals("active")) {
             String loanBrief = user.getName() + " har lånat " + item.getTitle();
-            try (Writer writer = new FileWriter(loansFilePath)){
-                gson.toJson(loanBrief, writer);
+            try {
+                Path fil_sökväg = Paths.get(loansFilePath);
+                Files.writeString(fil_sökväg, loanBrief);
             }catch(IOException e){
                 System.out.println("Kunde inte spara filen: " + e.getLocalizedMessage());
             }
@@ -69,6 +74,8 @@ public class LoanManager {
             System.out.println(user.getName() + " är avstängd och kan inte låna tyvärr!");
             return;
         }
+        item.setAvailable(false); //Ska ändra senare 
+        System.out.println("Lånet har registrerats!");
     }
 
     }

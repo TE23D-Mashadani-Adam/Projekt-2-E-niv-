@@ -45,7 +45,7 @@ public abstract class Publications implements Comparable<Publications>, Borrowab
 
     @Override
     public boolean isAvailabe() {
-        return this.isAvailabe();
+        return this.isAvailable;
     }
 
     @Override

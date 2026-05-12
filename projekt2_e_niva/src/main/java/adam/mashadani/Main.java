@@ -81,9 +81,11 @@ public class Main {
                         Users user = um.findUser(bokEmailAnswer);
                         Books book = lm.getBookByName(loanBookAnswer);
 
-                        loanManager.registerLoan(user, book);
+                        if(user != null && book != null){
+                            loanManager.registerLoan(user, book);
+                        }
                     }else if(loanAnswer == 2){
-                        
+
                     }
                     break;
                 case "17":
