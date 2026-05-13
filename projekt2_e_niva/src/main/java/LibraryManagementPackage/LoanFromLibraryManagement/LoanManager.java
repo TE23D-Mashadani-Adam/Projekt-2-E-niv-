@@ -55,7 +55,7 @@ public class LoanManager {
     public void registerLoan(Users user, Publications item, String path) {
         if (item != null) {
             if (!item.isAvailabe()) {
-                System.out.println(item.getTypeByName() + " är redan utlånad!");
+                System.out.println(item.getTitle() + " är redan utlånad!");
                 return;
             }
 
@@ -70,7 +70,7 @@ public class LoanManager {
                         Path fil_sökväg = Paths.get(loansFilePath);
                         Files.writeString(fil_sökväg, loanBrief, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
                     } catch (IOException e) {
-                        System.out.println("Kunde inte spara i filen: " + e.getLocalizedMessage());
+                        System.out.println("Kunde inte spara i filen: " + e.getStackTrace());
                     }
                 } else {
                     System.out.println(user.getName() + " är avstängd och kan inte låna tyvärr!");
@@ -85,10 +85,11 @@ public class LoanManager {
 
     }
 
-    public void endLoan(Users user, Publications item, String path){
-        if (item == null || user == null) return;
+    public void endLoan(Users user, Publications item, String path) {
+        if (item == null || user == null)
+            return;
 
-        try{
+        try {
             Path fil_sökväg = Paths.get(loansFilePath);
 
             if (Files.exists(fil_sökväg)) {
@@ -101,14 +102,29 @@ public class LoanManager {
                     Files.write(fil_sökväg, alla_lån);
                     item.setAvailable(true);
                     ApiClient.putRequest(path, item.getId(), item);
+                    System.out.println("Lånet har avslutats och tagits bort från systemet");
+
+                }else{
+                    System.out.println("Kunde inte hitta lånet i filen, kontrollera namn och titel och förösk igen");
                 }
 
-                System.out.println("Lånet har avslutats och tagits bort från servern");
-            }else{
-                System.out.println("Kunde inte hitta lånet i filen");
+            } else {
+                System.out.println("Kunde inte hitta lånefilen, vänligen försök senare");
             }
-        }catch(IOException e){
-            System.out.println("Fel vid upphämtning av filen: " + e.getLocalizedMessage());
+        } catch (IOException e) {
+            System.out.println("Fel vid upphämtning av filen: " + e.getStackTrace());
         }
     }
+
+    public void showActiveLoans(){
+        try{
+            List<String> lines = Files.readAllLines(Paths.get(loansFilePath));
+            for (String line : lines) {
+                System.out.println(line);
+            }
+        }catch(IOException e){
+            System.out.println("Kunde inte hämta filen, fel: " + e.getStackTrace());
+        }
+    }
+
 }

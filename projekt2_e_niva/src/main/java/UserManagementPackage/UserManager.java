@@ -92,14 +92,14 @@ public class UserManager {
                 return responseMessage;
             }
         } else {
-            return "Användaren hittades inte, kontrollera att du skrev rätt email!";
+            return "";
         }
 
     }
 
     public void activateSuspendedUser(String id) {
         String responseMessage = ApiClient.deleteData("suspended", id);
-        if (responseMessage == "") {
+        if (responseMessage == "Data deleted") {
             System.out.println("Användare aktiverad");
         } else {
             System.out.println(responseMessage);
@@ -108,7 +108,7 @@ public class UserManager {
 
     public void deleteUser(String id) {
         String responseMessage = ApiClient.deleteData("users", id);
-        if (responseMessage == "") {
+        if (responseMessage == "Data deleted") {
             System.out.println("Användare togs bort!");
         } else {
             System.out.println(responseMessage);

@@ -161,7 +161,7 @@ public class LibraryManager {
 
     public void deleteBook(String id) {
         String responseMessage = ApiClient.deleteData(bookPath, id);
-        if (responseMessage == "") {
+        if (responseMessage == "Data deleted") {
             System.out.println("Bok borttagen!");
         } else {
             System.out.println(responseMessage);
@@ -170,7 +170,7 @@ public class LibraryManager {
 
     public void deleteMagazine(String id) {
         String responseMessage = ApiClient.deleteData(magazinePath, id);
-        if (responseMessage == "") {
+        if (responseMessage == "Data deleted") {
             System.out.println("Tidning borttagen!");
         } else {
             System.out.println(responseMessage);
