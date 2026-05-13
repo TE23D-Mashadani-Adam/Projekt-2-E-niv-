@@ -11,6 +11,7 @@ import com.google.gson.reflect.TypeToken;
 
 import LibraryManagementPackage.PublicationChildClasses.Books;
 import LibraryManagementPackage.PublicationChildClasses.Magazines;
+import LibraryManagementPackage.PublicationChildClasses.Media;
 import adam.mashadani.ApiClient;
 
 import java.lang.reflect.Type;
@@ -19,9 +20,12 @@ public class LibraryManager {
     private ArrayList<Publications> publicationsList = new ArrayList<Publications>();
     private ArrayList<Books> bookArrayList = new ArrayList<>();
     private ArrayList<Magazines> magazinesArrayLisy = new ArrayList<>();
+    private ArrayList<Media> mediaArrayListType = new ArrayList<>();
+
 
     private Map<String, Books> bookMapList = new HashMap<>();
     private Map<String, Magazines> magazineMapList = new HashMap<>();
+    private Map<String, Media> mediaMapList = new HashMap<>();
 
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -29,7 +33,9 @@ public class LibraryManager {
     }.getType();
     private Type magazineListType = new TypeToken<ArrayList<Magazines>>() {
     }.getType();
-
+    private Type mediaListType = new TypeToken<ArrayList<Media>>() {
+    }.getType();
+    
     private final String bookPath = "books";
     private final String magazinePath = "magazines";
 
@@ -121,9 +127,14 @@ public class LibraryManager {
     }
 
     public Magazines getMagazineByName(String title) {
-        Magazines magazine = findByName(title, magazineListType, magazinesArrayLisy, magazineMapList, title);
+        Magazines magazine = findByName("magazines", magazineListType, magazinesArrayLisy, magazineMapList, title);
         return magazine;
     }
+
+    public Media getMediaByName(String title){
+        Media media = findByName("media", mediaListType, mediaArrayListType, mediaMapList, title);
+        return media;
+    } 
 
     public String showMagazineByName(String title) {
         Magazines magazine = findByName(magazinePath, magazineListType, magazinesArrayLisy, magazineMapList, title);

@@ -6,6 +6,8 @@ import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 // Importera Type för att hjälpa json att omvandla data
 import java.lang.reflect.Type;
+import java.net.http.HttpRequest;
+
 //UniREST objekt som vi behöver
 import kong.unirest.Unirest;
 import kong.unirest.HttpResponse;
@@ -82,6 +84,28 @@ public class ApiClient {
             }
         }
         
+    }
+
+    public static String putRequest(String path, String id, Object data){
+        String returnMessage = "Data uppdaterad";
+        try{
+            String jsonBody = gson.toJson(data);
+            HttpResponse<String> response = Unirest.put(base_url + path + "/" + id)
+            .header("Content-Type", "application/json")
+            .body(jsonBody)
+            .asString();
+
+            int status = response.getStatus();
+
+            if(status != 200 && status != 204 && status != 500){
+                returnMessage = "Fel vid uppdatering, statuskod: " + status;
+                System.out.println(status);
+            }
+        }catch(UnirestException e){
+            returnMessage = "Kunde inte nå servern";
+        }
+
+        return returnMessage;
     }
 
     

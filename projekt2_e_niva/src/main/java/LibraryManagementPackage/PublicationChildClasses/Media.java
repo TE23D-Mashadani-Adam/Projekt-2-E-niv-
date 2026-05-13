@@ -3,41 +3,28 @@ package LibraryManagementPackage.PublicationChildClasses;
 import LibraryManagementPackage.Publications;
 
 public class Media extends Publications {
-    private String id;
     private String type;
-    private String title;
     private String genre;
     private int age;
-    private boolean isAvailbe;
 
-    public Media(String title, Boolean isAvailable, String id, String type, String title2, String genre, int age,
+    public Media(String title, Boolean isAvailable, String type, String genre, int age,
             boolean isAvailbe) {
         super(title, isAvailable);
-        this.id = id;
         this.type = type;
-        title = title2;
         this.genre = genre;
         this.age = age;
-        this.isAvailbe = isAvailbe;
     }
 
     @Override
     public String getInfo() {
-        return "Media [id=" + id + ", type=" + type + ", title=" + title + ", genre=" + genre + ", age=" + age
-                + ", isAvailbe=" + isAvailbe + "]";
+        return "Media [id=" + this.getId() + ", type=" + type + ", title=" + this.getTitle() + ", genre=" + genre + ", age=" + age
+                + ", isAvailbe=" + this.isAvailabe() + "]";
     }
 
-  
-    public String getId() {
-        return id;
-    }
+
 
     public String getType() {
         return type;
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     public String getGenre() {
@@ -48,17 +35,11 @@ public class Media extends Publications {
         return age;
     }
 
-    public boolean isAvailbe() {
-        return isAvailbe;
-    }
 
     public void setType(String type) {
         this.type = type;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
 
     public void setGenre(String genre) {
         this.genre = genre;
@@ -66,10 +47,6 @@ public class Media extends Publications {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    public void setAvailbe(boolean isAvailbe) {
-        this.isAvailbe = isAvailbe;
     }
 
     @Override

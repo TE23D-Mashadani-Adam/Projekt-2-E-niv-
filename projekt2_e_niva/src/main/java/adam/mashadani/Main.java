@@ -9,6 +9,8 @@ import java.util.Scanner;
 import LibraryManagementPackage.LibraryManager;
 import LibraryManagementPackage.LoanFromLibraryManagement.LoanManager;
 import LibraryManagementPackage.PublicationChildClasses.Books;
+import LibraryManagementPackage.PublicationChildClasses.Magazines;
+import LibraryManagementPackage.PublicationChildClasses.Media;
 import UserManagementPackage.UserManager;
 
 public class Main {
@@ -71,7 +73,7 @@ public class Main {
                     break;
                 case "16":
                     int loanAnswer = getIntInput("Ange vilken typ du vill låna:"
-                            + "\n" + "1. Bok" + "\n" + "2. Tidning" + "\n" + "3. Media", scanner);
+                            + "\n" + "1. Bok" + "\n" + "2. Tidning" + "\n" + "3. Media" + "\n", scanner);
                     if (loanAnswer == 1) {
                         System.out.println("Ange bokens namn:");
                         String loanBookAnswer = scanner.nextLine();
@@ -81,14 +83,55 @@ public class Main {
                         Users user = um.findUser(bokEmailAnswer);
                         Books book = lm.getBookByName(loanBookAnswer);
 
-                        if(user != null && book != null){
-                            loanManager.registerLoan(user, book);
+                        if (user != null && book != null) {
+                            loanManager.registerLoan(user, book, "books");
                         }
-                    }else if(loanAnswer == 2){
+                    } else if (loanAnswer == 2) {
+                        System.out.println("Ange tidningens namn:");
+                        String loanMagazineAnswer = scanner.nextLine();
+                        System.out.println("Ange din email:");
+                        String magEmailAnswer = scanner.nextLine();
 
+                        Users user = um.findUser(magEmailAnswer);
+                        Magazines magazine = lm.getMagazineByName(loanMagazineAnswer); // Metod i LibraryManager
+
+                        if (user != null && magazine != null) {
+                            loanManager.registerLoan(user, magazine, "magazines");
+                        } else {
+                            System.out.println("Kunde inte hitta användare eller tidning.");
+                        }
+                    } else if (loanAnswer == 3) {
+                        System.out.println("Ange mediets namn:");
+                        String loanMediaAnswer = scanner.nextLine();
+                        System.out.println("Ange din email:");
+                        String mediaEmailAnswer = scanner.nextLine();
+
+                        Users user = um.findUser(mediaEmailAnswer);
+                        Media media = lm.getMediaByName(loanMediaAnswer); // Metod i LibraryManager
+
+                        if (user != null && media != null) {
+                            loanManager.registerLoan(user, media, "media");
+                        } else {
+                            System.out.println("Kunde inte hitta användare eller media.");
+                        }
                     }
                     break;
                 case "17":
+                    int loanAnswer2 = getIntInput("Ange vilken typ du vill återlämna:"
+                            + "\n" + "1. Bok" + "\n" + "2. Tidning" + "\n" + "3. Media" + "\n", scanner);
+                    if (loanAnswer2 == 1) {
+                        System.out.println("Ange bokens namn:");
+                        String loanBookAnswer = scanner.nextLine();
+                        System.out.println("Ange din email:");
+                        String bokEmailAnswer = scanner.nextLine();
+
+                        Users user = um.findUser(bokEmailAnswer);
+                        Books book = lm.getBookByName(loanBookAnswer);
+
+                        if (user != null && book != null) {
+                            loanManager.endLoan(user, book, "books");
+                        }
+                    }
 
                     break;
                 case "18":
