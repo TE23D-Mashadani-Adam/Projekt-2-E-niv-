@@ -21,6 +21,8 @@ public class Main {
         LoanManager loanManager = new LoanManager();
         Scanner scanner = new Scanner(System.in);
 
+        loanManager.loadLoansFromFile(); //Läser in filen när programmet startar
+
         while (true) {
 
             displayLibraryMenu();
@@ -79,6 +81,13 @@ public class Main {
                     break;
                 case "18":
                     loanManager.showActiveLoans();
+                    break;
+                case "19":
+                    System.out.println("Välj vilken typ media du vill söka (Måste stava rätt)");
+                    String typeInput = scanner.nextLine();
+                    int ageInput = getIntInput("Ange minsta ålder du vill ha för mediat:", scanner);
+
+                    lm.showMedia(typeInput, ageInput);
                     break;
                 default:
                     return; // Avslutar programmet
@@ -294,8 +303,8 @@ public class Main {
         System.out.println("  7. Visa avstängda             8.  Spärra användare");
         System.out.println("  14. Aktivera spärrad användare 15. [!] TA BORT ANVÄNDARE");
         System.out.println("--------------------------------------------------------");
-        System.out.println("  16. LÅNA       17. ÅTERLÄMNA");
-        System.out.println("  18. Visa alla aktiva lån");
+        System.out.println("  16. LÅNA                      17. ÅTERLÄMNA");
+        System.out.println("  18. Visa alla aktiva lån      19. Visa media");
         System.out.println("--------------------------------------------------------");
         System.out.println("  0. AVSLUTA PROGRAMMET");
         System.out.println("========================================================");

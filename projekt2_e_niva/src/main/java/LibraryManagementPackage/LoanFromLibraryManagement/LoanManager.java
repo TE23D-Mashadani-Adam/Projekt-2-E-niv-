@@ -37,10 +37,30 @@ public class LoanManager {
     private String loansFilePath = "active_loans.txt";
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
+    private ArrayList<Loan> loans = new ArrayList<>();
+    private Type loanListType = new TypeToken<ArrayList<Loan>>() {
+    }.getType();
+
+    //Laddar upp alla låner från filen
+    public void loadLoansFromFile() {
+        try {
+            Path fil_sökväg = Paths.get(loansFilePath);
+            if (Files.exists(fil_sökväg) && Files.size(fil_sökväg) > 0) {
+                String json_innehåll = Files.readString(fil_sökväg);
+                this.loans = gson.fromJson(json_innehåll, loanListType);
+            } else {
+                this.loans = new ArrayList<>();
+            }
+        } catch (IOException e) {
+            System.out.println("Kunde inte läsa in lån vid start: " + e.getMessage());
+            this.loans = new ArrayList<>(); // Säkra att listan inte är null
+        }
+    }
+
     public String checkUserStatus(Users user) {
         String jsonData = ApiClient.getData(suspendedUserPath);
         ArrayList<SuspendedUsers> suspendedUsersList = new ArrayList<>();
-        ApiClient.convertToJavaFormat(suspendedUserPath, suspendedUserListType, suspendedUsersList);
+        ApiClient.convertToJavaFormat(jsonData, suspendedUserListType, suspendedUsersList);
         String userStatus = "active";
 
         for (SuspendedUsers suspendedUser : suspendedUsersList) {
@@ -53,7 +73,7 @@ public class LoanManager {
     }
 
     public void registerLoan(Users user, Publications item, String path) {
-        if (item != null) {
+        if (item != null && user != null) {
             if (!item.isAvailabe()) {
                 System.out.println(item.getTitle() + " är redan utlånad!");
                 return;
@@ -65,10 +85,13 @@ public class LoanManager {
             if (putRequestMessage.equals("Data uppdaterad")) {
 
                 if (checkUserStatus(user).equals("active")) {
-                    String loanBrief = user.getName() + " har lånat " + item.getTitle() + "\n";
+                    Loan newLoan = new Loan(item, user);
+                    loans.add(newLoan);
+                    String loansInJson = gson.toJson(loans);
+
                     try {
                         Path fil_sökväg = Paths.get(loansFilePath);
-                        Files.writeString(fil_sökväg, loanBrief, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+                        Files.writeString(fil_sökväg, loansInJson);
                     } catch (IOException e) {
                         System.out.println("Kunde inte spara i filen: " + e.getStackTrace());
                     }
@@ -93,19 +116,20 @@ public class LoanManager {
             Path fil_sökväg = Paths.get(loansFilePath);
 
             if (Files.exists(fil_sökväg)) {
-                List<String> alla_lån = Files.readAllLines(fil_sökväg);
-                String sökSträng = user.getName() + " har lånat " + item.getTitle();
 
-                boolean strängBorttagen = alla_lån.removeIf(rad -> rad.contains(sökSträng));
+                String json_innehåll = Files.readString(fil_sökväg);
+                loans = gson.fromJson(json_innehåll, loanListType);
+                int previousLoansSize = loans.size();
+                loans.removeIf(loan -> loan.getUser().getId().equals(user.getId()) &&
+                        loan.getBorrowedPublication().getId().equals(item.getId()));
 
-                if (strängBorttagen) {
-                    Files.write(fil_sökväg, alla_lån);
-                    item.setAvailable(true);
-                    ApiClient.putRequest(path, item.getId(), item);
-                    System.out.println("Lånet har avslutats och tagits bort från systemet");
+                if (loans.size() < previousLoansSize) {
+                    String updatedLoanList = gson.toJson(loans);
+                    Files.writeString(fil_sökväg, updatedLoanList);
 
-                }else{
-                    System.out.println("Kunde inte hitta lånet i filen, kontrollera namn och titel och förösk igen");
+                    System.out.println("Lånet har avslutats!");
+                } else {
+                    System.out.println("Lånet hittades inte, kontrollera att du skrev rätt namn på användare");
                 }
 
             } else {
@@ -116,13 +140,13 @@ public class LoanManager {
         }
     }
 
-    public void showActiveLoans(){
-        try{
+    public void showActiveLoans() {
+        try {
             List<String> lines = Files.readAllLines(Paths.get(loansFilePath));
             for (String line : lines) {
                 System.out.println(line);
             }
-        }catch(IOException e){
+        } catch (IOException e) {
             System.out.println("Kunde inte hämta filen, fel: " + e.getStackTrace());
         }
     }

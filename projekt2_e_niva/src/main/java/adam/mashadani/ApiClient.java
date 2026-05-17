@@ -42,7 +42,7 @@ public class ApiClient {
         return returnMessage;
     }
 
-    // Hämtar data från servern
+    // Hämtar data från servern och returnerar som Json sträng
     public static String getData(String path) {
         HttpResponse<String> response = null;
         try {
@@ -73,8 +73,7 @@ public class ApiClient {
     }
 
     //Konverterar json data till java format och sparar i arraylista
-     public static void convertToJavaFormat(String path, Type t, ArrayList list){
-        String jsonData = ApiClient.getData(path);
+     public static void convertToJavaFormat(String jsonData, Type t, ArrayList list){
 
         if (jsonData != null) {
             ArrayList TemporaryList = gson.fromJson(jsonData, t);

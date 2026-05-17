@@ -1,5 +1,7 @@
 package LibraryManagementPackage.PublicationChildClasses;
 
+import java.util.List;
+
 import LibraryManagementPackage.Publications;
 
 public class Media extends Publications {
@@ -20,8 +22,6 @@ public class Media extends Publications {
         return "Media [id=" + this.getId() + ", type=" + type + ", title=" + this.getTitle() + ", genre=" + genre + ", age=" + age
                 + ", isAvailbe=" + this.isAvailabe() + "]";
     }
-
-
 
     public String getType() {
         return type;

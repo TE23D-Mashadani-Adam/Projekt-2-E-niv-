@@ -24,8 +24,12 @@ public class UserManager {
     private Type userListType = new TypeToken<ArrayList<Users>>() {
     }.getType();
 
+    private final String userPath = "users";
+    private final String suspendedPath = "suspended";
+
     public void ShowUsersSorted() {
-        ApiClient.convertToJavaFormat("users", userListType, allUserArrayList);
+        String jsonData = ApiClient.getData(userPath);
+        ApiClient.convertToJavaFormat(jsonData, userListType, allUserArrayList);
         Collections.sort(allUserArrayList);
         for (Users user : allUserArrayList) {
             System.out.println(user.getName());
@@ -35,7 +39,8 @@ public class UserManager {
     public void ShowSuspendedUsers() {
         Type suspendedListType = new TypeToken<ArrayList<SuspendedUsers>>() {
         }.getType();
-        ApiClient.convertToJavaFormat("suspended", suspendedListType, allSuspendedUsers);
+        String jsonData = ApiClient.getData(suspendedPath);
+        ApiClient.convertToJavaFormat(jsonData, suspendedListType, allSuspendedUsers);
         for (SuspendedUsers sUser : allSuspendedUsers) {
             System.out.println("User ID: " + sUser.getUserId() + " Reason: " + sUser.getReason());
         }
@@ -43,7 +48,8 @@ public class UserManager {
 
     // Hittar en användare och skickar den tillbaka som en objekt
     public Users findUser(String email) {
-        ApiClient.convertToJavaFormat("users", userListType, allUserArrayList);
+        String jsonData = ApiClient.getData(userPath);
+        ApiClient.convertToJavaFormat(jsonData, userListType, allUserArrayList);
         if (allUserArrayList != null) {
             for (Users user : allUserArrayList) {
                 allUsersMap.put(user.getEmail(), user);

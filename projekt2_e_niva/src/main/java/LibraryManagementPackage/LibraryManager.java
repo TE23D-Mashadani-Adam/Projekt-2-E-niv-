@@ -3,7 +3,9 @@ package LibraryManagementPackage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -19,9 +21,9 @@ import java.lang.reflect.Type;
 public class LibraryManager {
     private ArrayList<Publications> publicationsList = new ArrayList<Publications>();
     private ArrayList<Books> bookArrayList = new ArrayList<>();
+    private ArrayList<Media> mediaArrayList = new ArrayList<>();
     private ArrayList<Magazines> magazinesArrayLisy = new ArrayList<>();
     private ArrayList<Media> mediaArrayListType = new ArrayList<>();
-
 
     private Map<String, Books> bookMapList = new HashMap<>();
     private Map<String, Magazines> magazineMapList = new HashMap<>();
@@ -35,9 +37,10 @@ public class LibraryManager {
     }.getType();
     private Type mediaListType = new TypeToken<ArrayList<Media>>() {
     }.getType();
-    
+
     private final String bookPath = "books";
     private final String magazinePath = "magazines";
+    private final String mediaPath = "media";
 
     // Lägger till en bok i systemet, returnerar hur det gick
     public String AddBook(String title, Boolean isAvailable, String author,
@@ -65,6 +68,7 @@ public class LibraryManager {
         }
     }
 
+    // Visar alla böcker som finns i biblioteket
     public void showBooks() {
 
         String jsonData = ApiClient.getData(bookPath);
@@ -84,9 +88,30 @@ public class LibraryManager {
         }
     }
 
+    // Visar all media som finns i biblioteket
+    public void showMedia(String type, int age) {
+        String jsonData = ApiClient.getData(mediaPath);
+        ApiClient.convertToJavaFormat(jsonData, mediaListType, mediaArrayList);
+        List<Media> medias = mediaArrayList.stream()
+                .filter(media -> media.getType().equals(type) && media.getAge() >= age)
+                .sorted()
+                .distinct()
+                .collect(Collectors.toList());
+
+        if (!medias.isEmpty()) {
+            for (Media media : medias) {
+                System.out.println(media.getInfo());
+            }
+        } else {
+            System.out.println("Inga media hittades enligt din sökfilter, testa ändra filter och försök igen");
+        }
+    }
+
+    // Hittar publikationen genom att ange dens namn och returnerar den som objekt
     public <T extends Publications> T findByName(String path, Type t, ArrayList<T> list, Map<String, T> map,
             String title) {
-        ApiClient.convertToJavaFormat(path, t, list);
+        String jsonData = ApiClient.getData(path);
+        ApiClient.convertToJavaFormat(jsonData, t, list);
         if (list != null) {
             for (T item : list) {
                 map.put(item.getTitle(), item);
@@ -106,6 +131,7 @@ public class LibraryManager {
 
     }
 
+    // Hittar boken genom namn och returnerar information om boken som sträng
     public String showBookByName(String title) {
         Books book = findByName(bookPath, booksListType, bookArrayList, bookMapList, title);
         if (book != null) {
@@ -116,25 +142,28 @@ public class LibraryManager {
 
     }
 
+    // Hittar boken genom namn och returnerar själva boken som objekt
     public Books getBookByName(String title) {
         Books book = findByName(bookPath, booksListType, bookArrayList, bookMapList, title);
         if (book != null) {
             return book;
-        }else{
+        } else {
             System.out.println("Boken hittades ej, kontrollera att du skrev in rätt titel!");
             return null;
         }
     }
 
+    // Hittar tidningen genom namn och returnerar själva tidningen som objekt
     public Magazines getMagazineByName(String title) {
         Magazines magazine = findByName("magazines", magazineListType, magazinesArrayLisy, magazineMapList, title);
         return magazine;
     }
 
-    public Media getMediaByName(String title){
+    // Hittar media genom namn och returnerar själva mediat som objekt
+    public Media getMediaByName(String title) {
         Media media = findByName("media", mediaListType, mediaArrayListType, mediaMapList, title);
         return media;
-    } 
+    }
 
     public String showMagazineByName(String title) {
         Magazines magazine = findByName(magazinePath, magazineListType, magazinesArrayLisy, magazineMapList, title);
