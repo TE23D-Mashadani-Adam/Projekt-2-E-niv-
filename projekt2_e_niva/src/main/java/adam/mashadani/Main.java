@@ -13,6 +13,18 @@ import LibraryManagementPackage.PublicationChildClasses.Magazines;
 import LibraryManagementPackage.PublicationChildClasses.Media;
 import UserManagementPackage.UserManager;
 
+/**
+ * Huvudklassen för bibliotekshanteringssystemet (Library Management System).
+ * <p>
+ * Denna klass fungerar som applikationens startpunkt och ansvarar för att
+ * initiera centrala komponenter, såsom {@link LoanManager}, samt att 
+ * förbereda systemets data vid programstart.
+ * </p>
+ *
+ * @author Adam Mashadani
+ * @version 1.0
+ */
+
 public class Main {
     public static void main(String[] args) {
 

@@ -2,9 +2,9 @@ package LibraryManagementPackage.PublicationChildClasses;
 
 import java.util.List;
 
-import LibraryManagementPackage.Publications;
+import LibraryManagementPackage.PublicationsName;
 
-public class Media extends Publications {
+public class Media extends PublicationsName {
     private String type;
     private String genre;
     private int age;

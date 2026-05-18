@@ -1,8 +1,8 @@
 package LibraryManagementPackage.PublicationChildClasses;
 
-import LibraryManagementPackage.Publications;
+import LibraryManagementPackage.PublicationsName;
 
-public class Magazines extends Publications{
+public class Magazines extends PublicationsName{
     private int issueNumber;
     private String category;
     private int publishYear;

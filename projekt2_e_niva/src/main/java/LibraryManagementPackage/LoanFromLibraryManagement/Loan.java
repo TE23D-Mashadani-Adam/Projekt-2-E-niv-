@@ -1,31 +1,30 @@
 package LibraryManagementPackage.LoanFromLibraryManagement;
 
-import LibraryManagementPackage.Publications;
+import LibraryManagementPackage.PublicationsName;
 import UserManagementPackage.Users;
 
 public class Loan {
-    private Publications borrowedPublication;
+    private String borrowedPublicationName;
     private Users user;
 
     
 
-    public Loan(Publications borrowedPublication, Users user) {
-        this.borrowedPublication = borrowedPublication;
+    public Loan(String borrowedPublication, Users user) {
+        this.borrowedPublicationName = borrowedPublication;
         this.user = user;
     }
 
-    public Loan(){}
-
-    public Publications getBorrowedPublication() {
-        return borrowedPublication;
+   
+    public String getBorrowedPublicationName() {
+        return borrowedPublicationName;
     }
 
     public Users getUser() {
         return user;
     }
 
-    public void setBorrowedPublication(Publications borrowedPublication) {
-        this.borrowedPublication = borrowedPublication;
+    public void setBorrowedPublicationName(String borrowedPublication) {
+        this.borrowedPublicationName = borrowedPublication;
     }
 
     public void setUser(Users user) {

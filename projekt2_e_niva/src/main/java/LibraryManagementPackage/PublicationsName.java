@@ -2,12 +2,12 @@ package LibraryManagementPackage;
 
 import LibraryManagementPackage.LoanFromLibraryManagement.Borrowable;
 
-public abstract class Publications implements Comparable<Publications>, Borrowable {
+public abstract class PublicationsName implements Comparable<PublicationsName>, Borrowable {
     private String id;
     private String title;
     private Boolean isAvailable;
 
-    public Publications(String title, Boolean isAvailable) {
+    public PublicationsName(String title, Boolean isAvailable) {
         this.title = title;
         this.isAvailable = isAvailable;
     }
@@ -39,7 +39,7 @@ public abstract class Publications implements Comparable<Publications>, Borrowab
     }
 
     @Override
-    public int compareTo(Publications other) {
+    public int compareTo(PublicationsName other) {
         return this.title.compareToIgnoreCase(other.title);
     }
 

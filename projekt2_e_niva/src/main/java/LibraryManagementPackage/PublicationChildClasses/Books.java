@@ -1,8 +1,8 @@
 package LibraryManagementPackage.PublicationChildClasses;
 
-import LibraryManagementPackage.Publications;
+import LibraryManagementPackage.PublicationsName;
 
-public class Books extends Publications {
+public class Books extends PublicationsName {
     private String author;
     private String genre;
     private int pages;

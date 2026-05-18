@@ -19,7 +19,7 @@ import adam.mashadani.ApiClient;
 import java.lang.reflect.Type;
 
 public class LibraryManager {
-    private ArrayList<Publications> publicationsList = new ArrayList<Publications>();
+    private ArrayList<PublicationsName> publicationsList = new ArrayList<PublicationsName>();
     private ArrayList<Books> bookArrayList = new ArrayList<>();
     private ArrayList<Media> mediaArrayList = new ArrayList<>();
     private ArrayList<Magazines> magazinesArrayLisy = new ArrayList<>();
@@ -79,7 +79,7 @@ public class LibraryManager {
             publicationsList.clear();
             publicationsList.addAll(books);
             Collections.sort(publicationsList);
-            for (Publications p : publicationsList) {
+            for (PublicationsName p : publicationsList) {
                 if (p instanceof Books) {
                     Books b = (Books) p;
                     System.out.println(b.getTitle());
@@ -108,7 +108,7 @@ public class LibraryManager {
     }
 
     // Hittar publikationen genom att ange dens namn och returnerar den som objekt
-    public <T extends Publications> T findByName(String path, Type t, ArrayList<T> list, Map<String, T> map,
+    public <T extends PublicationsName> T findByName(String path, Type t, ArrayList<T> list, Map<String, T> map,
             String title) {
         String jsonData = ApiClient.getData(path);
         ApiClient.convertToJavaFormat(jsonData, t, list);
@@ -180,7 +180,7 @@ public class LibraryManager {
         publicationsList.clear();
         publicationsList.addAll(magazines);
         Collections.sort(publicationsList);
-        for (Publications p : publicationsList) {
+        for (PublicationsName p : publicationsList) {
             if (p instanceof Magazines) {
                 Magazines m = (Magazines) p;
                 System.out.println(m.getTitle());

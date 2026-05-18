@@ -16,7 +16,7 @@ import com.google.gson.reflect.TypeToken;
 
 import LibraryManagementPackage.PublicationChildClasses.Books;
 import LibraryManagementPackage.PublicationChildClasses.Magazines;
-import LibraryManagementPackage.Publications;
+import LibraryManagementPackage.PublicationsName;
 import UserManagementPackage.SuspendedUsers;
 import UserManagementPackage.Users;
 
@@ -72,7 +72,7 @@ public class LoanManager {
         return userStatus;
     }
 
-    public void registerLoan(Users user, Publications item, String path) {
+    public void registerLoan(Users user, PublicationsName item, String path) {
         if (item != null && user != null) {
             if (!item.isAvailabe()) {
                 System.out.println(item.getTitle() + " är redan utlånad!");
@@ -85,7 +85,7 @@ public class LoanManager {
             if (putRequestMessage.equals("Data uppdaterad")) {
 
                 if (checkUserStatus(user).equals("active")) {
-                    Loan newLoan = new Loan(item, user);
+                    Loan newLoan = new Loan(item.getTitle(), user);
                     loans.add(newLoan);
                     String loansInJson = gson.toJson(loans);
 
@@ -108,7 +108,7 @@ public class LoanManager {
 
     }
 
-    public void endLoan(Users user, Publications item, String path) {
+    public void endLoan(Users user, PublicationsName item, String path) {
         if (item == null || user == null)
             return;
 
@@ -121,11 +121,13 @@ public class LoanManager {
                 loans = gson.fromJson(json_innehåll, loanListType);
                 int previousLoansSize = loans.size();
                 loans.removeIf(loan -> loan.getUser().getId().equals(user.getId()) &&
-                        loan.getBorrowedPublication().getId().equals(item.getId()));
+                        loan.getBorrowedPublicationName().equals(item.getTitle()));
 
                 if (loans.size() < previousLoansSize) {
                     String updatedLoanList = gson.toJson(loans);
                     Files.writeString(fil_sökväg, updatedLoanList);
+                    item.setAvailable(true);
+                    ApiClient.putRequest(path, item.getId(), item);
 
                     System.out.println("Lånet har avslutats!");
                 } else {
