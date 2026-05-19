@@ -2,8 +2,6 @@ package adam.mashadani;
 
 import UserManagementPackage.Users;
 
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 import LibraryManagementPackage.LibraryManager;
@@ -15,16 +13,15 @@ import UserManagementPackage.UserManager;
 
 /**
  * Huvudklassen för bibliotekshanteringssystemet (Library Management System).
- * <p>
+ * 
  * Denna klass fungerar som applikationens startpunkt och ansvarar för att
- * initiera centrala komponenter, såsom {@link LoanManager}, samt att 
+ * initiera centrala komponenter, såsom {@link LoanManager}, hantera menyn, samt att 
  * förbereda systemets data vid programstart.
- * </p>
  *
  * @author Adam Mashadani
  * @version 1.0
+ * @since 2026
  */
-
 public class Main {
     public static void main(String[] args) {
 
@@ -108,8 +105,14 @@ public class Main {
 
     }
 
-    // Kontrollerar att användaren skrivit rätt integer input för att undvika
-    // programkrasch
+    /**
+     * Läser in och validerar att användaren anger ett heltal via konsolen.
+     * Fångar felaktiga inmatningar för att förhindra programkrasch.
+     *
+     * @param prompt  meddelandet eller instruktionen som visas för användaren.
+     * @param scanner det {@link Scanner}-objekt som används för inläsning.
+     * @return ett giltigt heltal angivet av användaren.
+     */
     private static int getIntInput(String prompt, Scanner scanner) {
         while (true) {
             try {
@@ -122,6 +125,12 @@ public class Main {
         }
     }
 
+    /**
+     * Tar emot användarinput och registrerar en ny bok i systemet.
+     *
+     * @param lm      den {@link LibraryManager} som boken ska läggas till i.
+     * @param scanner det {@link Scanner}-objekt som används för inläsning.
+     */
     private static void handleAddBook(LibraryManager lm, Scanner scanner) {
         System.out.println("Välj titel");
         String title = scanner.nextLine();
@@ -135,6 +144,12 @@ public class Main {
         System.out.println(lm.AddBook(title, isAvailable, author, genre, pages));
     }
 
+    /**
+     * Tar emot användarinput och registrerar en ny tidning i systemet.
+     *
+     * @param lm      den {@link LibraryManager} som tidningen ska läggas till i.
+     * @param scanner det {@link Scanner}-objekt som används för inläsning.
+     */
     private static void handleAddMagazines(LibraryManager lm, Scanner scanner) {
         System.out.print("Ange titel: ");
         String title2 = scanner.nextLine();
@@ -147,6 +162,12 @@ public class Main {
         System.out.println(lm.AddMagazines(title2, isAvailable2, issueNumber, category, publishYear));
     }
 
+    /**
+     * Tar emot användarinput och registrerar en ny biblioteksanvändare.
+     *
+     * @param um      den {@link UserManager} som användaren ska läggas till i.
+     * @param scanner det {@link Scanner}-objekt som används för inläsning.
+     */
     private static void handleAddUser(UserManager um, Scanner scanner) {
         System.out.print("Ange namn: ");
         String name = scanner.nextLine();
@@ -155,6 +176,12 @@ public class Main {
         System.out.println(um.addUser(name, email));
     }
 
+    /**
+     * Spärrar/stänger av en användare baserat på angiven e-postadress och anledning.
+     *
+     * @param um      den {@link UserManager} som hanterar avstängningen.
+     * @param scanner det {@link Scanner}-objekt som används för inläsning.
+     */
     private static void handleSuspendUser(UserManager um, Scanner scanner) {
         System.out.print("Ange användarens email: ");
         String suspendedEmail = scanner.nextLine();
@@ -163,48 +190,99 @@ public class Main {
         um.suspendUser(suspendedEmail, suspendReason);
     }
 
+    /**
+     * Söker efter en specifik bok i systemet via dess titel och visar resultatet.
+     *
+     * @param lm      den {@link LibraryManager} där sökningen ska utföras.
+     * @param scanner det {@link Scanner}-objekt som används för inläsning.
+     */
     private static void handleSearchBook(LibraryManager lm, Scanner scanner) {
         System.out.print("Ange bokens titel: ");
         String titleInput = scanner.nextLine();
         System.out.println("Bok: " + lm.showBookByName(titleInput));
     }
 
+    /**
+     * Söker efter en specifik tidning i systemet via dess titel och visar resultatet.
+     *
+     * @param lm      den {@link LibraryManager} där sökningen ska utföras.
+     * @param scanner det {@link Scanner}-objekt som används för inläsning.
+     */
     private static void handleSearchMagazine(LibraryManager lm, Scanner scanner) {
         System.out.print("Ange tidningens titel: ");
         String titleInput2 = scanner.nextLine();
         System.out.println("Tidning: " + lm.showMagazineByName(titleInput2));
     }
 
+    /**
+     * Söker efter en användare via e-postadress och visar användarens detaljer.
+     *
+     * @param um      den {@link UserManager} där sökningen ska utföras.
+     * @param scanner det {@link Scanner}-objekt som används för inläsning.
+     */
     private static void handleSearchUser(UserManager um, Scanner scanner) {
         System.out.print("Ange email: ");
         String emailInput = scanner.nextLine();
         System.out.println("Användare: " + um.ShowUserByName(emailInput));
     }
 
+    /**
+     * Tar bort en bok från bibliotekssystemet baserat på dess ID-nummer.
+     *
+     * @param lm      den {@link LibraryManager} som hanterar raderingen av boken.
+     * @param scanner det {@link Scanner}-objekt som används för inläsning.
+     */
     private static void handleRemoveBook(LibraryManager lm, Scanner scanner) {
         System.out.print("Ange bokens id: ");
         String idInputBook = scanner.nextLine();
         lm.deleteBook(idInputBook);
     }
 
+    /**
+     * Tar bort en tidning från bibliotekssystemet baserat på dess ID-nummer.
+     *
+     * @param lm      den {@link LibraryManager} som hanterar raderingen av tidningen.
+     * @param scanner det {@link Scanner}-objekt som används för inläsning.
+     */
     private static void handleRemoveMagazine(LibraryManager lm, Scanner scanner) {
         System.out.print("Ange tidningens id: ");
         String idInputMagazine = scanner.nextLine();
         lm.deleteMagazine(idInputMagazine);
     }
 
+    /**
+     * Aktiverar en tidigare spärrad användare i systemet med hjälp av avstängnings-ID.
+     *
+     * @param um      den {@link UserManager} som hanterar kontoaktiveringen.
+     * @param scanner det {@link Scanner}-objekt som används för inläsning.
+     */
     private static void handleActivateUser(UserManager um, Scanner scanner) {
         System.out.print("Ange avstängnings-id: ");
         String suspendedUseridInput = scanner.nextLine();
         um.activateSuspendedUser(suspendedUseridInput);
     }
 
+    /**
+     * Raderar en användarprofil permanent från systemet baserat på användar-ID.
+     *
+     * @param um      den {@link UserManager} som hanterar raderingen.
+     * @param scanner det {@link Scanner}-objekt som används för inläsning.
+     */
     private static void handleRemoveUser(UserManager um, Scanner scanner) {
         System.out.print("Ange användarens id: ");
         String userIdInput = scanner.nextLine();
         um.deleteUser(userIdInput);
     }
 
+    /**
+     * Hanterar flödet för att avsluta och återlämna en publikation (bok, tidning eller media).
+     * Kontrollerar att användaren och publikationen existerar innan lånet avslutas via {@link LoanManager}.
+     *
+     * @param scanner     det {@link Scanner}-objekt som används för inläsning.
+     * @param lm          den {@link LibraryManager} som innehåller publikationerna.
+     * @param um          den {@link UserManager} som innehåller användarna.
+     * @param loanManager den {@link LoanManager} som hanterar låneregistret.
+     */
     private static void handleEndLoanPublication(Scanner scanner, LibraryManager lm, UserManager um,
             LoanManager loanManager) {
         int loanAnswer2 = getIntInput("Ange vilken typ du vill återlämna:"
@@ -254,8 +332,18 @@ public class Main {
         }
     }
 
+    /**
+     * Hanterar flödet för att registrera ett nytt lån av en publikation (bok, tidning eller media).
+     * Kontrollerar giltigheten för både användaren och mediet innan lånet verkställs.
+     *
+     * @param scanner     det {@link Scanner}-objekt som används för inläsning.
+     * @param lm          den {@link LibraryManager} som innehåller publikationerna.
+     * @param um          den {@link UserManager} som innehåller användarna.
+     * @param loanManager den {@link LoanManager} som registrerar lånet.
+     */
     private static void handleLoanPublication(Scanner scanner, LibraryManager lm, UserManager um,
             LoanManager loanManager) {
+        while(true){
         int loanAnswer = getIntInput("Ange vilken typ du vill låna:"
                 + "\n" + "1. Bok" + "\n" + "2. Tidning" + "\n" + "3. Media" + "\n", scanner);
         if (loanAnswer == 1) {
@@ -270,6 +358,7 @@ public class Main {
             if (user != null && book != null) {
                 loanManager.registerLoan(user, book, "books");
             }
+            return;
         } else if (loanAnswer == 2) {
             System.out.println("Ange tidningens namn:");
             String loanMagazineAnswer = scanner.nextLine();
@@ -284,6 +373,7 @@ public class Main {
             } else {
                 System.out.println("Kunde inte hitta användare eller tidning.");
             }
+            return;
         } else if (loanAnswer == 3) {
             System.out.println("Ange mediets namn:");
             String loanMediaAnswer = scanner.nextLine();
@@ -298,9 +388,16 @@ public class Main {
             } else {
                 System.out.println("Kunde inte hitta användare eller media.");
             }
+            return;
+        }else{
+            System.out.println("Ange en siffra 1-3 är du snäll");
         }
     }
+    }
 
+    /**
+     * Skriver ut administrationsmenyn och dess valmöjligheter till konsolen.
+     */
     private static void displayLibraryMenu() {
         System.out.println("\n========================================================");
         System.out.println("                BIBLIOTEKSSYSTEM - ADMIN                ");

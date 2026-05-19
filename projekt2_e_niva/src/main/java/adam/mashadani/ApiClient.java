@@ -13,11 +13,40 @@ import kong.unirest.Unirest;
 import kong.unirest.HttpResponse;
 import kong.unirest.UnirestException;
 
+/**
+ * Klientklass för kommunikation med externt REST-API.
+ * <p>
+ * Denna klass tillhandahåller statiska metoder för att utföra standardmässiga
+ * HTTP-anrop (GET, POST, PUT, DELETE) mot bibliotekssystemets server, 
+ * samt för att serialisera och deserialisera data med hjälp av Google Gson.
+ * </p>
+ *
+ * @author Adam Mashadani
+ * @version 1.0
+ */
 public class ApiClient {
+    
+    /** Bas-URL till serverns API-endpoint. */
     private static final String base_url = "http://10.151.168.5:3101/";
+    
+    /** Gson-instans konfigurerad med snygg utskrift (pretty printing) för JSON-hantering. */
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    // Skapar ny data objekt på servern och skickar tillbaka eventuella fel
+    /**
+     * Standardkonstruktor för ApiClient.
+     */
+    public ApiClient() {
+        // Standardkonstruktor
+    }
+
+    /**
+     * Skapar ett nytt dataobjekt på servern genom att skicka en HTTP POST-request.
+     * Metoden konverterar inskickat Java-objekt till en JSON-sträng i bodyn.
+     *
+     * @param path sökvägen (endpoint) på servern dit datan ska skickas (t.ex. "books").
+     * @param data det Java-objekt som ska serialiseras till JSON och sparas.
+     * @return ett statusmeddelande ("Data skickad" vid framgång, annars felmeddelande).
+     */
     public static String postData(String path, Object data) {
         String returnMessage = "Data skickad";
         try {
@@ -42,7 +71,12 @@ public class ApiClient {
         return returnMessage;
     }
 
-    // Hämtar data från servern och returnerar som Json sträng
+    /**
+     * Hämtar data från servern via en HTTP GET-request baserat på angiven sökväg.
+     *
+     * @param path sökvägen (endpoint) som datan ska hämtas ifrån.
+     * @return serverns svar som en rå JSON-sträng, eller {@code null} om servern inte kan nås.
+     */
     public static String getData(String path) {
         HttpResponse<String> response = null;
         try {
@@ -59,7 +93,13 @@ public class ApiClient {
         return response.getBody();
     }
 
-    // Tar bort önskad data från servern
+    /**
+     * Raderar data från servern via en HTTP DELETE-request baserat på sökväg och ett unikt ID.
+     *
+     * @param path sökvägen (endpoint) för den resurstyp som ska raderas.
+     * @param id   det unika ID-numret för det specifika objekt som ska tas bort.
+     * @return ett statusmeddelande ("Data deleted" vid framgång, annars felmeddelande).
+     */
     public static String deleteData(String path, String id) {
         String returnMessage = "Data deleted";
         try {
@@ -72,7 +112,14 @@ public class ApiClient {
 
     }
 
-    //Konverterar json data till java format och sparar i arraylista
+    /**
+     * Konverterar en rå JSON-sträng till önskat Java-format (ArrayList) och 
+     * synkroniserar innehållet med den inskickade listan.
+     *
+     * @param jsonData den råa JSON-strängen som hämtats från servern.
+     * @param t        måltypen (Type) som Gson ska mappa JSON-datan till.
+     * @param list     den mål-ArrayList som ska rensas och fyllas med den konverterade datan.
+     */
      public static void convertToJavaFormat(String jsonData, Type t, ArrayList list){
 
         if (jsonData != null) {
@@ -85,6 +132,14 @@ public class ApiClient {
         
     }
 
+    /**
+     * Uppdaterar ett befintligt dataobjekt på servern genom en HTTP PUT-request.
+     *
+     * @param path sökvägen (endpoint) för den resurstyp som ska uppdateras.
+     * @param id   det unika ID-numret för det objekt som ska uppdateras.
+     * @param data det nya Java-objektet som ska serialiseras till JSON och ersätta det gamla.
+     * @return ett statusmeddelande ("Data uppdaterad" vid framgång, annars felmeddelande).
+     */
     public static String putRequest(String path, String id, Object data){
         String returnMessage = "Data uppdaterad";
         try{
@@ -106,7 +161,5 @@ public class ApiClient {
 
         return returnMessage;
     }
-
-    
 
 }
