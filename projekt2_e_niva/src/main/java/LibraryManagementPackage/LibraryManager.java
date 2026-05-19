@@ -187,7 +187,6 @@ public class LibraryManager {
      *
      * @param type       den mediatyp som ska matchas (t.ex. "Spel").
      * @param age        den minsta åldersgränsen som mediet ska ha (>=).
-     * @param Comparator
      */
     public void showMedia(String type, int age) {
         String jsonData = ApiClient.getData(mediaPath);
