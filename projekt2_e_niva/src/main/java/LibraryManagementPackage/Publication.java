@@ -12,6 +12,7 @@ import LibraryManagementPackage.LoanFromLibraryManagement.Borrowable;
  *
  * @author Adam Mashadani
  * @version 1.1
+ * @since 2026
  */
 public abstract class Publication implements Comparable<Publication>, Borrowable {
     

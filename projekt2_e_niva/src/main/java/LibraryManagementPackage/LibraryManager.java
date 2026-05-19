@@ -3,6 +3,7 @@ package LibraryManagementPackage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -11,8 +12,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import LibraryManagementPackage.PublicationChildClasses.Books;
-import LibraryManagementPackage.PublicationChildClasses.Magazines;
+import LibraryManagementPackage.PublicationChildClasses.Book;
+import LibraryManagementPackage.PublicationChildClasses.Magazine;
 import LibraryManagementPackage.PublicationChildClasses.Media;
 import adam.mashadani.ApiClient;
 
@@ -21,57 +22,83 @@ import java.lang.reflect.Type;
 /**
  * Hanterar bibliotekets katalog och samlingar av olika publikationer.
  * <p>
- * Denna klass ansvarar för att kommunicera med databasen/servern via {@link ApiClient}
- * för att lägga till, hämta, söka efter och radera böcker, tidningar och övrig media.
+ * Denna klass ansvarar för att kommunicera med databasen/servern via
+ * {@link ApiClient}
+ * för att lägga till, hämta, söka efter och radera böcker, tidningar och övrig
+ * media.
  * </p>
  *
  * @author Adam Mashadani
  * @version 1.0
+ * @since 2026
  */
 public class LibraryManager {
 
-    /** Central lista som lagrar alla typer av publikationer för sortering och visning. */
+    /**
+     * Central lista som lagrar alla typer av publikationer för sortering och
+     * visning.
+     */
     private ArrayList<Publication> publicationsList = new ArrayList<Publication>();
-    
+
     /** Temporär lista som lagrar bokobjekt vid sökning och synkronisering. */
-    private ArrayList<Books> bookArrayList = new ArrayList<>();
-    
+    private ArrayList<Book> bookArrayList = new ArrayList<>();
+
     /** Temporär lista som lagrar mediaobjekt vid filtrering och strömhantering. */
     private ArrayList<Media> mediaArrayList = new ArrayList<>();
-    
+
     /** Temporär lista som lagrar tidningsobjekt vid sökning och synkronisering. */
-    private ArrayList<Magazines> magazinesArrayLisy = new ArrayList<>();
-    
-    /** Alternativ temporär lista som används vid sökning av specifika mediaobjekt efter namn. */
+    private ArrayList<Magazine> magazinesArrayLisy = new ArrayList<>();
+
+    /**
+     * Alternativ temporär lista som används vid sökning av specifika mediaobjekt
+     * efter namn.
+     */
     private ArrayList<Media> mediaArrayListType = new ArrayList<>();
 
-    /** Snabbregister (Map) som mappar en boks titel till dess motsvarande {@link Books}-objekt. */
-    private Map<String, Books> bookMapList = new HashMap<>();
-    
-    /** Snabbregister (Map) som mappar en tidnings titel till dess motsvarande {@link Magazines}-objekt. */
-    private Map<String, Magazines> magazineMapList = new HashMap<>();
-    
-    /** Snabbregister (Map) som mappar ett medies titel till dess motsvarande {@link Media}-objekt. */
+    /**
+     * Snabbregister (Map) som mappar en boks titel till dess motsvarande
+     * {@link Book}-objekt.
+     */
+    private Map<String, Book> bookMapList = new HashMap<>();
+
+    /**
+     * Snabbregister (Map) som mappar en tidnings titel till dess motsvarande
+     * {@link Magazine}-objekt.
+     */
+    private Map<String, Magazine> magazineMapList = new HashMap<>();
+
+    /**
+     * Snabbregister (Map) som mappar ett medies titel till dess motsvarande
+     * {@link Media}-objekt.
+     */
     private Map<String, Media> mediaMapList = new HashMap<>();
 
-    /** Gson-instans konfigurerad med snygg utskrift (pretty printing) för JSON-hantering. */
+    /**
+     * Gson-instans konfigurerad med snygg utskrift (pretty printing) för
+     * JSON-hantering.
+     */
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    /** Typdefinition för deserialisering av en lista med {@link Books} via Gson. */
-    private Type booksListType = new TypeToken<ArrayList<Books>>() {}.getType();
-    
-    /** Typdefinition för deserialisering av en lista med {@link Magazines} via Gson. */
-    private Type magazineListType = new TypeToken<ArrayList<Magazines>>() {}.getType();
-    
+    /** Typdefinition för deserialisering av en lista med {@link Book} via Gson. */
+    private Type booksListType = new TypeToken<ArrayList<Book>>() {
+    }.getType();
+
+    /**
+     * Typdefinition för deserialisering av en lista med {@link Magazine} via Gson.
+     */
+    private Type magazineListType = new TypeToken<ArrayList<Magazine>>() {
+    }.getType();
+
     /** Typdefinition för deserialisering av en lista med {@link Media} via Gson. */
-    private Type mediaListType = new TypeToken<ArrayList<Media>>() {}.getType();
+    private Type mediaListType = new TypeToken<ArrayList<Media>>() {
+    }.getType();
 
     /** API-sökväg (endpoint) för resurser av typen böcker. */
     private final String bookPath = "books";
-    
+
     /** API-sökväg (endpoint) för resurser av typen tidningar. */
     private final String magazinePath = "magazines";
-    
+
     /** API-sökväg (endpoint) för resurser av typen media. */
     private final String mediaPath = "media";
 
@@ -90,11 +117,12 @@ public class LibraryManager {
      * @param author      bokens författare.
      * @param genre       bokens genre.
      * @param pages       antal sidor i boken.
-     * @return ett statusmeddelande som beskriver om operationen lyckades eller misslyckades.
+     * @return ett statusmeddelande som beskriver om operationen lyckades eller
+     *         misslyckades.
      */
     public String AddBook(String title, Boolean isAvailable, String author,
             String genre, int pages) {
-        Books newBook = new Books(title, isAvailable, author, genre, pages);
+        Book newBook = new Book(title, isAvailable, author, genre, pages);
         publicationsList.add(newBook);
         String responseMessage = ApiClient.postData(bookPath, newBook);
         if (responseMessage == "Data skickad") {
@@ -105,18 +133,20 @@ public class LibraryManager {
     }
 
     /**
-     * Lägger till en ny tidning i bibliotekssystemet och skickar datan till servern.
+     * Lägger till en ny tidning i bibliotekssystemet och skickar datan till
+     * servern.
      *
      * @param title       tidningens titel.
      * @param isAvailable tidningens tillgänglighetsstatus.
      * @param issueNumber utgåvonummer/nummer i ordningen.
      * @param catergory   tidningens kategori.
      * @param publishYear tidningens utgivningsår.
-     * @return ett statusmeddelande som beskriver om operationen lyckades eller misslyckades.
+     * @return ett statusmeddelande som beskriver om operationen lyckades eller
+     *         misslyckades.
      */
     public String AddMagazines(String title, Boolean isAvailable, int issueNumber,
             String catergory, int publishYear) {
-        Magazines newMagazine = new Magazines(title, isAvailable, issueNumber, catergory, publishYear);
+        Magazine newMagazine = new Magazine(title, isAvailable, issueNumber, catergory, publishYear);
         publicationsList.add(newMagazine);
         String responseMessage = ApiClient.postData(magazinePath, newMagazine);
         if (responseMessage == "Data skickad") {
@@ -127,21 +157,23 @@ public class LibraryManager {
     }
 
     /**
-     * Hämtar alla böcker från servern, sorterar dem i bokstavsordning och visar deras titlar i konsolen.
+     * Hämtar alla böcker från servern, sorterar dem i bokstavsordning och visar
+     * deras titlar i konsolen.
      */
     public void showBooks() {
-
         String jsonData = ApiClient.getData(bookPath);
         if (jsonData != null) {
 
-            ArrayList<Books> books = gson.fromJson(jsonData, booksListType);
+            ArrayList<Book> books = gson.fromJson(jsonData, booksListType);
+            HashSet<Book> uniqueBooks = new HashSet<>(books);
 
             publicationsList.clear();
-            publicationsList.addAll(books);
+            publicationsList.addAll(uniqueBooks);
             Collections.sort(publicationsList);
+
             for (Publication p : publicationsList) {
-                if (p instanceof Books) {
-                    Books b = (Books) p;
+                if (p instanceof Book) {
+                    Book b = (Book) p;
                     System.out.println(b.getTitle());
                 }
             }
@@ -149,43 +181,55 @@ public class LibraryManager {
     }
 
     /**
-     * Hämtar all media från servern, filtrerar utbudet baserat på typ och åldersgräns med hjälp 
+     * Hämtar all media från servern, filtrerar utbudet baserat på typ och
+     * åldersgräns med hjälp
      * av Java Streams, samt sorterar och visar resultatet för användaren.
      *
-     * @param type den mediatyp som ska matchas (t.ex. "Spel").
-     * @param age  den minsta åldersgränsen som mediet ska ha (>=).
+     * @param type       den mediatyp som ska matchas (t.ex. "Spel").
+     * @param age        den minsta åldersgränsen som mediet ska ha (>=).
+     * @param Comparator
      */
     public void showMedia(String type, int age) {
         String jsonData = ApiClient.getData(mediaPath);
         ApiClient.convertToJavaFormat(jsonData, mediaListType, mediaArrayList);
-        List<Media> medias = mediaArrayList.stream()
-                .filter(media -> media.getType().equals(type) && media.getAge() >= age)
-                .sorted()
-                .distinct()
-                .collect(Collectors.toList());
 
-        if (!medias.isEmpty()) {
-            for (Media media : medias) {
-                System.out.println(media.getInfo());
+        if (mediaArrayList != null && !mediaArrayList.isEmpty()) {
+            long matchCount = mediaArrayList.stream()
+                    .filter(media -> media.getType().equals(type) && media.getAge() >= age)
+                    .count();
+            if (matchCount > 0) {
+                mediaArrayList.stream()
+                        .filter(media -> media.getType().equals(type) && media.getAge() >= age)
+                        .distinct()
+                        .sorted((media1, media2) -> media1.getTitle().compareToIgnoreCase(media2.getTitle()))
+                        .forEach(media -> System.out.println(media.getInfo()));
+            } else {
+                System.out.println("Inga media hittades enligt ditt sökfilter, testa ändra filter och försök igen");
             }
+
         } else {
-            System.out.println("Inga media hittades enligt din sökfilter, testa ändra filter och försök igen");
+            System.out.println("Hittade ingen media, kontrollera att det finns tillgänglig media på servern");
         }
+
     }
 
     /**
-     * En generisk hjälpmetod som hämtar resurser från en angiven API-sökväg, mappar dem 
-     * i ett register baserat på titel, och returnerar det matchande objektet om det hittas.
+     * En generisk hjälpmetod som hämtar resurser från en angiven API-sökväg, mappar
+     * dem
+     * i ett register baserat på titel, och returnerar det matchande objektet om det
+     * hittas.
      *
      * @param <T>   den specifika subklassen till {@link Publication} som hanteras.
      * @param path  API-endpointen (t.ex. "books", "magazines" eller "media").
-     * @param t     typdefinitionen för klassen (Type) som används vid JSON-konverteringen.
+     * @param t     typdefinitionen för klassen (Type) som används vid
+     *              JSON-konverteringen.
      * @param list  den interna listan där objekten tillfälligt ska sparas.
-     * @param map   det register (Map) där objekten struktureras upp med titeln som nyckel.
+     * @param map   det register (Map) där objekten struktureras upp med titeln som
+     *              nyckel.
      * @param title titeln på den publikation som söks.
      * @return objektet av typen T om det påträffas, annars {@code null}.
      */
-    public <T extends Publication> T findByName(String path, Type t, ArrayList<T> list, Map<String, T> map,
+    private <T extends Publication> T findByName(String path, Type t, ArrayList<T> list, Map<String, T> map,
             String title) {
         String jsonData = ApiClient.getData(path);
         ApiClient.convertToJavaFormat(jsonData, t, list);
@@ -209,13 +253,15 @@ public class LibraryManager {
     }
 
     /**
-     * Söker efter en bok baserat på dess titel och returnerar dess fullständiga informationssträng.
+     * Söker efter en bok baserat på dess titel och returnerar dess fullständiga
+     * informationssträng.
      *
      * @param title titeln på boken som ska sökas upp.
-     * @return en sträng med bokens detaljer om den hittas, annars meddelas att boken inte hittades.
+     * @return en sträng med bokens detaljer om den hittas, annars meddelas att
+     *         boken inte hittades.
      */
     public String showBookByName(String title) {
-        Books book = findByName(bookPath, booksListType, bookArrayList, bookMapList, title);
+        Book book = findByName(bookPath, booksListType, bookArrayList, bookMapList, title);
         if (book != null) {
             return book.getInfo();
         } else {
@@ -229,10 +275,11 @@ public class LibraryManager {
      * Prints ett felmeddelande i konsolen om objektet saknas.
      *
      * @param title titeln på boken som eftersöks.
-     * @return det matchande {@link Books}-objektet, eller {@code null} om det ej påträffas.
+     * @return det matchande {@link Book}-objektet, eller {@code null} om det ej
+     *         påträffas.
      */
-    public Books getBookByName(String title) {
-        Books book = findByName(bookPath, booksListType, bookArrayList, bookMapList, title);
+    public Book getBookByName(String title) {
+        Book book = findByName(bookPath, booksListType, bookArrayList, bookMapList, title);
         if (book != null) {
             return book;
         } else {
@@ -245,10 +292,11 @@ public class LibraryManager {
      * Söker efter en tidning via dess titel och returnerar tidningsobjektet.
      *
      * @param title titeln på tidningen som eftersöks.
-     * @return det matchande {@link Magazines}-objektet, eller {@code null} om det ej påträffas.
+     * @return det matchande {@link Magazine}-objektet, eller {@code null} om det
+     *         ej påträffas.
      */
-    public Magazines getMagazineByName(String title) {
-        Magazines magazine = findByName("magazines", magazineListType, magazinesArrayLisy, magazineMapList, title);
+    public Magazine getMagazineByName(String title) {
+        Magazine magazine = findByName("magazines", magazineListType, magazinesArrayLisy, magazineMapList, title);
         return magazine;
     }
 
@@ -256,7 +304,8 @@ public class LibraryManager {
      * Söker efter ett mediaobjekt via dess titel och returnerar objektet.
      *
      * @param title titeln på mediet som eftersöks.
-     * @return det matchande {@link Media}-objektet, eller {@code null} om det ej påträffas.
+     * @return det matchande {@link Media}-objektet, eller {@code null} om det ej
+     *         påträffas.
      */
     public Media getMediaByName(String title) {
         Media media = findByName("media", mediaListType, mediaArrayListType, mediaMapList, title);
@@ -264,13 +313,14 @@ public class LibraryManager {
     }
 
     /**
-     * Söker efter en tidning baserat på dess titel och returnerar dess fullständiga informationssträng.
+     * Söker efter en tidning baserat på dess titel och returnerar dess fullständiga
+     * informationssträng.
      *
      * @param title titeln på tidningen som ska sökas upp.
      * @return en sträng med tidningens detaljer, annars ett felmeddelande.
      */
     public String showMagazineByName(String title) {
-        Magazines magazine = findByName(magazinePath, magazineListType, magazinesArrayLisy, magazineMapList, title);
+        Magazine magazine = findByName(magazinePath, magazineListType, magazinesArrayLisy, magazineMapList, title);
         if (magazine != null) {
             return magazine.getInfo();
         } else {
@@ -279,17 +329,19 @@ public class LibraryManager {
     }
 
     /**
-     * Hämtar alla tidningar från servern, sorterar dem i bokstavsordning och visar deras titlar i konsolen.
+     * Hämtar alla tidningar från servern, sorterar dem i bokstavsordning och visar
+     * deras titlar i konsolen.
      */
     public void showMagazines() {
         String jsonData = ApiClient.getData(magazinePath);
-        ArrayList<Magazines> magazines = gson.fromJson(jsonData, magazineListType);
+        ArrayList<Magazine> magazines = gson.fromJson(jsonData, magazineListType);
+        HashSet<Magazine> uniqueMagazines = new HashSet<>(magazines);
         publicationsList.clear();
-        publicationsList.addAll(magazines);
+        publicationsList.addAll(uniqueMagazines);
         Collections.sort(publicationsList);
         for (Publication p : publicationsList) {
-            if (p instanceof Magazines) {
-                Magazines m = (Magazines) p;
+            if (p instanceof Magazine) {
+                Magazine m = (Magazine) p;
                 System.out.println(m.getTitle());
             }
         }
@@ -310,7 +362,8 @@ public class LibraryManager {
     }
 
     /**
-     * Raderar en tidning permanent från databasen/servern med hjälp av tidningens unika ID.
+     * Raderar en tidning permanent från databasen/servern med hjälp av tidningens
+     * unika ID.
      *
      * @param id det unika ID-numret på tidningen som ska raderas.
      */

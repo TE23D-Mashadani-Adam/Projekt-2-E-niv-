@@ -1,0 +1,13 @@
+C:\Users\adam.mashadani\Documents\Prog 2 Java\Projekt 2 E-niv†\projekt2_e_niva\src\main\java\adam\mashadani\ApiClient.java
+C:\Users\adam.mashadani\Documents\Prog 2 Java\Projekt 2 E-niv†\projekt2_e_niva\src\main\java\adam\mashadani\Main.java
+C:\Users\adam.mashadani\Documents\Prog 2 Java\Projekt 2 E-niv†\projekt2_e_niva\src\main\java\LibraryManagementPackage\LibraryManager.java
+C:\Users\adam.mashadani\Documents\Prog 2 Java\Projekt 2 E-niv†\projekt2_e_niva\src\main\java\LibraryManagementPackage\Publication.java
+C:\Users\adam.mashadani\Documents\Prog 2 Java\Projekt 2 E-niv†\projekt2_e_niva\src\main\java\LibraryManagementPackage\LoanFromLibraryManagement\Borrowable.java
+C:\Users\adam.mashadani\Documents\Prog 2 Java\Projekt 2 E-niv†\projekt2_e_niva\src\main\java\LibraryManagementPackage\LoanFromLibraryManagement\Loan.java
+C:\Users\adam.mashadani\Documents\Prog 2 Java\Projekt 2 E-niv†\projekt2_e_niva\src\main\java\LibraryManagementPackage\LoanFromLibraryManagement\LoanManager.java
+C:\Users\adam.mashadani\Documents\Prog 2 Java\Projekt 2 E-niv†\projekt2_e_niva\src\main\java\LibraryManagementPackage\PublicationChildClasses\Books.java
+C:\Users\adam.mashadani\Documents\Prog 2 Java\Projekt 2 E-niv†\projekt2_e_niva\src\main\java\LibraryManagementPackage\PublicationChildClasses\Magazines.java
+C:\Users\adam.mashadani\Documents\Prog 2 Java\Projekt 2 E-niv†\projekt2_e_niva\src\main\java\LibraryManagementPackage\PublicationChildClasses\Media.java
+C:\Users\adam.mashadani\Documents\Prog 2 Java\Projekt 2 E-niv†\projekt2_e_niva\src\main\java\UserManagementPackage\SuspendedUser.java
+C:\Users\adam.mashadani\Documents\Prog 2 Java\Projekt 2 E-niv†\projekt2_e_niva\src\main\java\UserManagementPackage\UserManager.java
+C:\Users\adam.mashadani\Documents\Prog 2 Java\Projekt 2 E-niv†\projekt2_e_niva\src\main\java\UserManagementPackage\Users.java

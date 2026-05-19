@@ -14,11 +14,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import LibraryManagementPackage.PublicationChildClasses.Books;
-import LibraryManagementPackage.PublicationChildClasses.Magazines;
+import LibraryManagementPackage.PublicationChildClasses.Book;
+import LibraryManagementPackage.PublicationChildClasses.Magazine;
 import LibraryManagementPackage.Publication;
 import UserManagementPackage.SuspendedUser;
-import UserManagementPackage.Users;
+import UserManagementPackage.User;
 
 import java.lang.reflect.Type;
 import java.nio.file.Files;
@@ -94,11 +94,11 @@ public class LoanManager {
     /**
      * Kontrollerar om en specifik användare är avstängd genom att hämta spärrlistan från servern.
      *
-     * @param user den användare {@link Users} vars status ska kontrolleras.
+     * @param user den användare {@link User} vars status ska kontrolleras.
      * @return en sträng som representerar användarens status: {@code "suspended"} om användaren 
      *         finns i avstängningsregistret, annars {@code "active"}.
      */
-    public String checkUserStatus(Users user) {
+    private String checkUserStatus(User user) {
         String jsonData = ApiClient.getData(suspendedUserPath);
         ArrayList<SuspendedUser> suspendedUsersList = new ArrayList<>();
         ApiClient.convertToJavaFormat(jsonData, suspendedUserListType, suspendedUsersList);
@@ -125,7 +125,7 @@ public class LoanManager {
      * @param item den publikation {@link Publication} som ska lånas ut (t.ex. en bok eller tidning).
      * @param path API-sökvägen för publikationstypen (t.ex. "books" eller "magazines") som ska uppdateras.
      */
-    public void registerLoan(Users user, Publication item, String path) {
+    public void registerLoan(User user, Publication item, String path) {
         if (item != null && user != null) {
             if (!item.isAvailable()) {
                 System.out.println(item.getTitle() + " är redan utlånad!");
@@ -173,7 +173,7 @@ public class LoanManager {
      * @param item den publikation {@link Publication} som lämnas tillbaka.
      * @param path API-sökvägen för publikationstypen som ska uppdateras på servern.
      */
-    public void endLoan(Users user, Publication item, String path) {
+    public void endLoan(User user, Publication item, String path) {
         if (item == null || user == null)
             return;
 

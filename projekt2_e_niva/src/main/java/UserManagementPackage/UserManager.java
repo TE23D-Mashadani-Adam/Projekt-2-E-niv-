@@ -3,13 +3,14 @@ package UserManagementPackage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import LibraryManagementPackage.PublicationChildClasses.Books;
+import LibraryManagementPackage.PublicationChildClasses.Book;
 
 import java.lang.reflect.Type;
 import adam.mashadani.ApiClient;
@@ -25,14 +26,15 @@ import kong.unirest.UnirestException;
  *
  * @author Adam Mashadani
  * @version 1.0
+ * @since 2026
  */
 public class UserManager {
     
-    /** Snabbregister (Map) som mappar en användares e-postadress till dess motsvarande {@link Users}-objekt. */
-    private Map<String, Users> allUsersMap = new HashMap<>();
+    /** Snabbregister (Map) som mappar en användares e-postadress till dess motsvarande {@link User}-objekt. */
+    private Map<String, User> allUsersMap = new HashMap<>();
     
     /** Temporär lista som lagrar alla aktiva användare vid synkronisering med servern. */
-    private ArrayList<Users> allUserArrayList = new ArrayList<>();
+    private ArrayList<User> allUserArrayList = new ArrayList<>();
     
     /** Temporär lista som lagrar alla avstängda användare vid synkronisering med servern. */
     private ArrayList<SuspendedUser> allSuspendedUsers = new ArrayList<>();
@@ -40,8 +42,8 @@ public class UserManager {
     /** Gson-instans konfigurerad med snygg utskrift (pretty printing) för JSON-hantering. */
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
     
-    /** Typdefinition för deserialisering av en lista med {@link Users} via Gson. */
-    private Type userListType = new TypeToken<ArrayList<Users>>() {}.getType();
+    /** Typdefinition för deserialisering av en lista med {@link User} via Gson. */
+    private Type userListType = new TypeToken<ArrayList<User>>() {}.getType();
 
     /** API-sökväg (endpoint) för resurser av typen användare. */
     private final String userPath = "users";
@@ -63,8 +65,11 @@ public class UserManager {
     public void ShowUsersSorted() {
         String jsonData = ApiClient.getData(userPath);
         ApiClient.convertToJavaFormat(jsonData, userListType, allUserArrayList);
+        HashSet<User> uniqueUsers = new HashSet<>(allUserArrayList); //Rensar dubletter
+        allUserArrayList.clear();
+        allUserArrayList.addAll(uniqueUsers);
         Collections.sort(allUserArrayList);
-        for (Users user : allUserArrayList) {
+        for (User user : allUserArrayList) {
             System.out.println(user.getName());
         }
     }
@@ -87,14 +92,14 @@ public class UserManager {
      * Metoden uppdaterar det interna registret med aktuella användare vid sökning.
      *
      * @param email e-postadressen på den användare som eftersöks.
-     * @return det matchande {@link Users}-objektet om det hittas, annars {@code null}.
+     * @return det matchande {@link User}-objektet om det hittas, annars {@code null}.
      */
     // Hittar en användare och skickar den tillbaka som en objekt
-    public Users findUser(String email) {
+    public User findUser(String email) {
         String jsonData = ApiClient.getData(userPath);
         ApiClient.convertToJavaFormat(jsonData, userListType, allUserArrayList);
         if (allUserArrayList != null) {
-            for (Users user : allUserArrayList) {
+            for (User user : allUserArrayList) {
                 allUsersMap.put(user.getEmail(), user);
             }
         } else {
@@ -117,7 +122,7 @@ public class UserManager {
      * @return en strängrepresentation av användaren om den hittas, annars "Ej hittad".
      */
     public String ShowUserByName(String email) {
-        Users user = findUser(email);
+        User user = findUser(email);
         if (user != null) {
             return user.toString();
         } else {
@@ -133,7 +138,7 @@ public class UserManager {
      * @return ett statusmeddelande ("Användare skapad!" vid framgång, annars felmeddelande från API:et).
      */
     public String addUser(String name, String email) {
-        Users user = new Users(name, email);
+        User user = new User(name, email);
         String responseMessage = ApiClient.postData("users", user);
         if (responseMessage == "Data skickad") {
             return "Användare skapad!";
@@ -152,7 +157,7 @@ public class UserManager {
      */
     public String suspendUser(String email, String reason) {
 
-        Users user = findUser(email);
+        User user = findUser(email);
         if (user != null) {
             SuspendedUser supendedUser = new SuspendedUser(user.getId(), reason);
             String responseMessage = ApiClient.postData("suspended", supendedUser);

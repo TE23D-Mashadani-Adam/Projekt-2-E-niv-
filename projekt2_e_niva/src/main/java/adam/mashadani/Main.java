@@ -1,13 +1,13 @@
 package adam.mashadani;
 
-import UserManagementPackage.Users;
+import UserManagementPackage.User;
 
 import java.util.Scanner;
 
 import LibraryManagementPackage.LibraryManager;
 import LibraryManagementPackage.LoanFromLibraryManagement.LoanManager;
-import LibraryManagementPackage.PublicationChildClasses.Books;
-import LibraryManagementPackage.PublicationChildClasses.Magazines;
+import LibraryManagementPackage.PublicationChildClasses.Book;
+import LibraryManagementPackage.PublicationChildClasses.Magazine;
 import LibraryManagementPackage.PublicationChildClasses.Media;
 import UserManagementPackage.UserManager;
 
@@ -289,7 +289,7 @@ public class Main {
                 + "\n" + "1. Bok" + "\n" + "2. Tidning" + "\n" + "3. Media" + "\n", scanner);
         System.out.println("Ange din email:");
         String emailInput = scanner.nextLine();
-        Users user = um.findUser(emailInput);
+        User user = um.findUser(emailInput);
 
         if (user == null) {
             System.out.println("Användaren hittades inte, kontrollera din stavning");
@@ -297,7 +297,7 @@ public class Main {
             if (loanAnswer2 == 1) {
                 System.out.println("Ange bokens namn:");
                 String title = scanner.nextLine();
-                Books book = lm.getBookByName(title);
+                Book book = lm.getBookByName(title);
 
                 if (book != null) {
                     loanManager.endLoan(user, book, "books");
@@ -308,7 +308,7 @@ public class Main {
             } else if (loanAnswer2 == 2) {
                 System.out.println("Ange tidningens namn:");
                 String title = scanner.nextLine();
-                Magazines magazine = lm.getMagazineByName(title);
+                Magazine magazine = lm.getMagazineByName(title);
 
                 if (magazine != null) {
                     loanManager.endLoan(user, magazine, "magazines");
@@ -352,8 +352,8 @@ public class Main {
             System.out.println("Ange din email:");
             String bokEmailAnswer = scanner.nextLine();
 
-            Users user = um.findUser(bokEmailAnswer);
-            Books book = lm.getBookByName(loanBookAnswer);
+            User user = um.findUser(bokEmailAnswer);
+            Book book = lm.getBookByName(loanBookAnswer);
 
             if (user != null && book != null) {
                 loanManager.registerLoan(user, book, "books");
@@ -365,8 +365,8 @@ public class Main {
             System.out.println("Ange din email:");
             String magEmailAnswer = scanner.nextLine();
 
-            Users user = um.findUser(magEmailAnswer);
-            Magazines magazine = lm.getMagazineByName(loanMagazineAnswer);
+            User user = um.findUser(magEmailAnswer);
+            Magazine magazine = lm.getMagazineByName(loanMagazineAnswer);
 
             if (user != null && magazine != null) {
                 loanManager.registerLoan(user, magazine, "magazines");
@@ -380,7 +380,7 @@ public class Main {
             System.out.println("Ange din email:");
             String mediaEmailAnswer = scanner.nextLine();
 
-            Users user = um.findUser(mediaEmailAnswer);
+            User user = um.findUser(mediaEmailAnswer);
             Media media = lm.getMediaByName(loanMediaAnswer);
 
             if (user != null && media != null) {

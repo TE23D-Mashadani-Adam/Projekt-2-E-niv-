@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"adam.mashadani"},{"l":"All Packages","u":"allpackages-index.html"},{"l":"LibraryManagementPackage"},{"l":"LibraryManagementPackage.LoanFromLibraryManagement"},{"l":"LibraryManagementPackage.PublicationChildClasses"},{"l":"UserManagementPackage"}];updateSearchResults();

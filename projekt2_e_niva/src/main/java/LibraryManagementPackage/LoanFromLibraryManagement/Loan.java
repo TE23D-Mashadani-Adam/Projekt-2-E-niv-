@@ -1,17 +1,18 @@
 package LibraryManagementPackage.LoanFromLibraryManagement;
 
-import UserManagementPackage.Users;
+import UserManagementPackage.User;
 
 /**
  * Representerar ett enskilt lån i bibliotekssystemet.
  * <p>
  * Klassen kopplar samman namnet på en utlånad publikation med den specifika
- * användare {@link Users} som har lånat den. Den innehåller valideringar för att
+ * användare {@link User} som har lånat den. Den innehåller valideringar för att
  * säkerställa att inga felaktiga eller tomma värden registreras på lånet.
  * </p>
  *
  * @author Adam Mashadani
  * @version 1.1
+ * @since 2026
  */
 public class Loan {
     
@@ -19,17 +20,17 @@ public class Loan {
     private String borrowedPublicationName;
     
     /** Den användare (låntagare) som är registrerad på lånet. */
-    private Users user;
+    private User user;
 
     /**
      * Skapar en ny instans av ett Loan-objekt med angiven publikation och användare.
      * Validerar att parametrarna inte är null eller felaktigt formaterade.
      *
      * @param borrowedPublication namnet eller titeln på publikationen som lånas.
-     * @param user                det {@link Users}-objekt som representerar låntagaren.
+     * @param user                det {@link User}-objekt som representerar låntagaren.
      * @throws IllegalArgumentException om borrowedPublication är null/tom, eller om user är null.
      */
-    public Loan(String borrowedPublication, Users user) {
+    public Loan(String borrowedPublication, User user) {
         setBorrowedPublicationName(borrowedPublication);
         setUser(user);
     }
@@ -46,9 +47,9 @@ public class Loan {
     /**
      * Hämtar den användare som har registrerat detta lån.
      *
-     * @return ett {@link Users}-objekt som representerar låntagaren.
+     * @return ett {@link User}-objekt som representerar låntagaren.
      */
-    public Users getUser() {
+    public User getUser() {
         return user;
     }
 
@@ -68,10 +69,10 @@ public class Loan {
     /**
      * Uppdaterar och validerar användaren för detta lån.
      *
-     * @param user det nya {@link Users}-objektet som ska kopplas till lånet (får inte vara null).
+     * @param user det nya {@link User}-objektet som ska kopplas till lånet (får inte vara null).
      * @throws IllegalArgumentException om den angivna användaren är null.
      */
-    public void setUser(Users user) {
+    public void setUser(User user) {
         if (user == null) {
             throw new IllegalArgumentException("Användaren kan inte vara null.");
         }
